@@ -4,7 +4,6 @@ const App = () => {
   return (
     <>
       <Navbar />
-      <Button >Click Me</Button>
       </>
   );
 };

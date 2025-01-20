@@ -14,7 +14,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className={`w-full px-4 ${isLightMode ? "bg-gray-100" : "bg-gray-900"}`}>
+    <div className={`w-full fixed top-0 px-4 ${isLightMode ? "bg-gray-100" : "bg-gray-900"} shadow-md`}>
       <div className="flex items-center justify-between h-16 max-w-[1700px] mx-auto">
         {/* Left Section - Logo */}
         <div>
@@ -29,7 +29,7 @@ const Navbar = () => {
         <div className="flex items-center gap-4">
           {/* Create Button */}
           <Link to="/create">
-            <Button variant="default" className="p-2">
+            <Button variant="default" className="p-2 mr-4"> {/* Adjusted spacing */}
               <BsPlusSquareFill size={20} />
             </Button>
           </Link>
