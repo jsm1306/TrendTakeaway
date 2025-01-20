@@ -1,6 +1,6 @@
 .home-container {
     text-align: center;
-    background-color: #c3fdb8; /* Light green background */
+    background-color: #B6B6B6; /* Light green background */
     padding: 20px;
   }
   
@@ -24,8 +24,8 @@
   }
   
   .promo-image {
-    max-width: 300px; /* Set a fixed size for the image */
-    height: auto;
+    max-width: 500px; /* Increased the max-width for a larger image */
+    height: auto; /* Keeps the aspect ratio */
     border-radius: 8px; /* Optional: Add rounded corners */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
   }
