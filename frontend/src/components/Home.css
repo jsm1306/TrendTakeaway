@@ -1,0 +1,32 @@
+.home-container {
+    text-align: center;
+    background-color: #c3fdb8; /* Light green background */
+    padding: 20px;
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    margin-bottom: 20px; /* Add spacing below the heading */
+    font-weight: bold;
+  }
+  
+  .content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px; /* Space between the paragraph and the image */
+  }
+  
+  .description {
+    font-size: 1.2rem;
+    line-height: 1.6; /* Increase line spacing for readability */
+    max-width: 60%; /* Set maximum width for the paragraph */
+  }
+  
+  .promo-image {
+    max-width: 300px; /* Set a fixed size for the image */
+    height: auto;
+    border-radius: 8px; /* Optional: Add rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+  }
+  
