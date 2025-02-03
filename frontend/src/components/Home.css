@@ -1,32 +1,43 @@
+.home-layout {
+  display: flex;
+}
+
+.sidebar {
+  min-width: 64px;
+  height: 100vh;
+  overflow: hidden;
+}
+
 .home-container {
-    text-align: center;
-    background-color: #B6B6B6; /* Light green background */
-    padding: 80px;
-  }
-  
-  .title {
-    font-size: 2.5rem;
-    margin-bottom: 20px; /* Add spacing below the heading */
-    font-weight: bold;
-  }
-  
-  .content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px; /* Space between the paragraph and the image */
-  }
-  
-  .description {
-    font-size: 1.2rem;
-    line-height: 1.6; /* Increase line spacing for readability */
-    max-width: 60%; /* Set maximum width for the paragraph */
-  }
-  
-  .promo-image {
-    max-width: 500px; /* Increased the max-width for a larger image */
-    height: auto; /* Keeps the aspect ratio */
-    border-radius: 8px; /* Optional: Add rounded corners */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
-  }
-  
+  flex-grow: 1;
+  margin-left: 64px; /* Adjust based on sidebar width */
+  text-align: center;
+  background-color: #b6b6b6;
+  padding: 80px;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.description {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  max-width: 60%;
+}
+
+.promo-image {
+  max-width: 500px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
