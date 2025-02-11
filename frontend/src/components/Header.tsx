@@ -1,46 +1,3 @@
-// import React, { useState } from "react";
-// import { useAuth0 } from "@auth0/auth0-react";
-// import { RiLogoutBoxLine } from "react-icons/ri";
-
-// const Header = () => {
-//   const { user, isAuthenticated, logout } = useAuth0();
-//   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-//   return (
-//     <div className="header">
-//       {isAuthenticated && user && (
-//         <div className="relative">
-//           {/* Profile Image */}
-//           <img
-//             src={user.picture}
-//             alt="Profile"
-//             className="profile-image cursor-pointer"
-//             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-//             onError={(e) => {
-//               console.log("Image load failed:", user.picture);
-//               e.currentTarget.src = "/default-profile.png";
-//             }}
-//           />
-
-//           {/* Dropdown Menu */}
-//           {isDropdownOpen && (
-//             <div className="dropdown-menu">
-//               <p className="profile-name">{user.name}</p>
-//               <button
-//                 onClick={() => logout({ returnTo: window.location.origin })}
-//                 className="logout-btn"
-//               >
-//                 <RiLogoutBoxLine size={20} /> Logout
-//               </button>
-//             </div>
-//           )}
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Header;
 import React, { useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import "./Header.css";
@@ -66,7 +23,10 @@ const Header = () => {
               <p className="profile-name">{user?.name}</p>
               <button
                 className="logout-btn"
-                onClick={() => logout({ returnTo: window.location.origin })}
+                onClick={() => {
+                  setDropdownOpen(false);
+                  logout({ returnTo: window.location.origin });
+                }}
               >
                 <RiLogoutBoxLine size={20} />
                 Logout
