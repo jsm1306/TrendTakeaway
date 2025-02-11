@@ -23,21 +23,23 @@ const Products: React.FC = () => {
       });
   }, []);
 
-  if (error) return <p>{error}</p>;
+  if (error) return <p className="text-red-500 text-center mt-4">{error}</p>;
 
   return (
-    <div>
-      <h1>Products</h1>
-      <ul>
+    <div className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold text-center mb-6">Products</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {products.map(product => (
-          <li key={product._id}>
-            <img src={product.image} alt={product.name} width="100" />
-            <p>{product.name}</p>
-            <p>Price: ₹{product.price}</p>
-            <p>Ratings: {product.ratings}⭐</p>
-          </li>
+          <div key={product._id} className="bg-white shadow-lg rounded-lg overflow-hidden p-4">
+            <img src={product.image}  className="w-full h-40 object-cover" />
+            <div className="p-2 text-center">
+              <h2 className="text-lg font-semibold text-black">{product.name}</h2>
+              <p className="text-gray-700">Price: <span className="font-bold">₹{product.price}</span></p>
+              <p className="text-yellow-500">Ratings: {product.ratings}⭐</p>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
