@@ -10,7 +10,6 @@ const Home = () => {
 
   return (
     <div className="home-layout">
-      <Sidebar />
       <Header />
       <div className="home-container">
         <h2 className="typing-title">Welcome to TrendTakeaway!</h2>

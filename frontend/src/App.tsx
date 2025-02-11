@@ -1,21 +1,21 @@
-
-// import Home from "./components/Home"; 
-import React from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import MyComponent from "./components/MyComponent";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Sidebar from "./components/Sidebar";
+import Products from "./components/Products";
 import Home from "./components/Home";
-const App: React.FC = () => {
-  const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
 
+const App: React.FC = () => {
   return (
-    <><><Home /></><div>
-      
-        <>
-          
-          <MyComponent />
-        </>
-      
-    </div></>
+  
+      <div className="flex">
+        <Sidebar />
+        <div className="ml-16 w-full p-4"> {/* Ensures content is not hidden behind the sidebar */}
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/products" element={<Products />} />
+          </Routes>
+        </div>
+      </div>
+   
   );
 };
 
