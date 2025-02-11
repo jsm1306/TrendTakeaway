@@ -12,7 +12,8 @@
   flex-grow: 1;
   margin-left: 64px; /* Adjust based on sidebar width */
   text-align: center;
-  background-color: #b6b6b6;
+  background-color: #131a24;
+  color: #f9f9f9;
   padding: 80px;
 }
 
