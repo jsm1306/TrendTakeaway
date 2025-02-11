@@ -52,24 +52,7 @@ const Sidebar = () => {
         </Link>
       </div>  
 
-      <div className="absolute bottom-4 left-4">
-        {isAuthenticated ? (
-          <button
-            onClick={() => logout({ returnTo: window.location.origin })}
-            className="flex items-center gap-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-          >
-            <RiLogoutBoxLine size={20} />
-            {!isCollapsed && <span>Logout</span>}
-          </button>
-        ) : (
-          <button
-            onClick={() => loginWithRedirect()}
-            className="flex items-center gap-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-          >
-            {!isCollapsed && <span>Login</span>}
-          </button>
-        )}
-      </div>
+      
     </div>
   );
 };
