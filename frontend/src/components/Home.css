@@ -42,3 +42,63 @@
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+
+.typing-title {
+  font-size: 3rem;  /* Increase text size */
+  font-weight: bold; /* Make it bold */
+  color: #ffffff;  /* Keep it visible */
+  width: 30ch;  /* Ensure enough space for full text */
+  font-family: monospace;
+  white-space: nowrap; /* Prevent text wrapping */
+  overflow: hidden;
+  border-right: 3px solid white; /* Cursor effect */
+  animation: typing 3s steps(30) infinite alternate-reverse, blink 0.6s step-end infinite;
+}
+
+/* Typing animation */
+@keyframes typing {
+  from {
+    width: 0ch;
+  }
+}
+
+/* Blinking cursor effect */
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+.header {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px;
+  background-color: #131a24;
+  color: white;
+  border-radius: 8px;
+}
+
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-name {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.profile-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+
+
