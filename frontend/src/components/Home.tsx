@@ -1,27 +1,9 @@
-// import React from "react";
-// import "./Home.css"; // Assuming you have a CSS file for styling
-// import image from "../assets/image.jpg"; // Correct path to the image
-
-// const Home = () => {
-//   return (
-//     <div className="home-container">
-//       <h1 className="title">Welcome to TrendTakeaway!</h1>
-//       <div className="content">
-//         <p className="description">
-//         Amazon: Implement a "Product Comparison" tool to help users compare similar products based on specifications and reviews.
-//         </p>
-//         <img src={image} alt="Business Promo" className="promo-image" />
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Home;
 import React from "react";
 import "./Home.css";
 import image from "../assets/image.jpg";
 import Sidebar from "./Sidebar";
-import {useAuth0} from '@auth0/auth0-react';
+import { useAuth0 } from "@auth0/auth0-react";
+
 const Home = () => {
   const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
 
@@ -29,16 +11,14 @@ const Home = () => {
     <div className="home-layout">
       <Sidebar />
       <div className="home-container">
-        <h1 className="title" >Welcome to TrendTakeaway!</h1>
+        <h2 className="typing-title">Welcome to TrendTakeaway!</h2>
         <div className="content">
           <p className="description">
             Amazon: Implement a "Product Comparison" tool to help users compare
             similar products based on specifications and reviews.
           </p>
           <img src={image} alt="Business Promo" className="promo-image" />
-          
         </div>
-        
       </div>
     </div>
   );

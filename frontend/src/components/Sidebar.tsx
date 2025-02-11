@@ -65,7 +65,7 @@ const Sidebar = () => {
           <FiSettings size={20} />
           {!isCollapsed && <span>Settings</span>}
         </Link>
-      </div>
+      </div>  
 
       <div className="absolute bottom-4 left-4">
         {isAuthenticated ? (
