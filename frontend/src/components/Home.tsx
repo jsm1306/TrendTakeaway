@@ -3,6 +3,7 @@ import "./Home.css";
 import image from "../assets/image.jpg";
 import Sidebar from "./Sidebar";
 import { useAuth0 } from "@auth0/auth0-react";
+import Header from "./Header";
 
 const Home = () => {
   const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
@@ -10,6 +11,7 @@ const Home = () => {
   return (
     <div className="home-layout">
       <Sidebar />
+      <Header />
       <div className="home-container">
         <h2 className="typing-title">Welcome to TrendTakeaway!</h2>
         <div className="content">
