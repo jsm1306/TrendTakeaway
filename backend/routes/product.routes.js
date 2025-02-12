@@ -1,12 +1,12 @@
 import express from "express";
 import { createProduct, deleteProduct, getProducts, updateProduct } from "../controllers/product.controller.js";
-import checkJwt from "../utils/authMiddleware.js"; // 🔹 Import JWT middleware
+import checkJwt from "../utils/authMiddleware.js"; 
 
 const router = express.Router();
 
 router.get("/", getProducts); // Public route
-router.post("/", checkJwt, createProduct); // ✅ Protected
-router.delete("/:id", checkJwt, deleteProduct); // ✅ Protected
-router.put("/:id", checkJwt, updateProduct); // ✅ Protected
+router.post("/", checkJwt, createProduct); 
+router.delete("/:id", checkJwt, deleteProduct); 
+router.put("/:id", checkJwt, updateProduct); 
 
 export default router;

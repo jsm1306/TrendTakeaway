@@ -2,6 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import productRoutes from "./routes/product.routes.js";
+import userRoutes from './routes/user.routes.js';
+
 import checkJwt from "./utils/authMiddleware.js";
 import cors from "cors";
 
@@ -22,9 +24,8 @@ connectDB().then(() => {
     app.use(express.json());
 
     app.use("/api/products", productRoutes);
-    app.use('/api/protected-route', checkJwt, (req, res) => {
-        res.json({ message: "You have access to this protected route!" });
-    });
+    app.use('/api/users', userRoutes);
+
 
     app.listen(PORT, () => {
         console.log(`Server started at http://localhost:${PORT}`);

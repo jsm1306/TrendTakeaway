@@ -10,7 +10,7 @@ const App: React.FC = () => {
       <div className="flex">
         <Sidebar />
         <Header />
-        <div className="ml-16 w-full p-4"> {/* Ensures content is not hidden behind the sidebar */}
+        <div className="ml-16 w-full p-4"> 
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<Products />} />

@@ -21,7 +21,7 @@ const MyComponent: React.FC = () => {
       }
 
       const data = await response.json();
-      setMessage(data.message); 
+      setMessage(data); 
     } catch (error) {
       console.error("Error fetching protected data:", error);
       setMessage("Failed to fetch data.");

@@ -8,7 +8,7 @@ const Products: React.FC = () => {
   useEffect(() => {
     axios.get("http://localhost:5000/api/products", { headers: { "Accept": "application/json" } })
     .then(response => {
-        console.log("Received Data:", response.data); 
+        // console.log("Received Data:", response.data); 
         if (Array.isArray(response.data)) {
           setProducts(response.data);
         } else if (response.data && Array.isArray(response.data.data)) {
