@@ -3,6 +3,7 @@ import Sidebar from "./components/Sidebar";
 import Products from "./components/Products";
 import Home from "./components/Home";
 import Header from "./components/Header";
+import Compare from "./components/Compare";
 
 const App: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<Products />} />
+            <Route path = "/compare"element={<Compare />} />
           </Routes>
         </div>
       </div>
