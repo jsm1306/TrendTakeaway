@@ -1,25 +1,32 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { IoHomeOutline, IoChatbubbleOutline } from "react-icons/io5";
 import { BsBoxSeam, BsCalendar } from "react-icons/bs";
 import { FiSettings } from "react-icons/fi";
-import { RiLogoutBoxLine } from "react-icons/ri";
 import { FaBars } from "react-icons/fa";
-import { useAuth0 } from "@auth0/auth0-react";
+const Sidebar: React.FC = () => {
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
+    return localStorage.getItem("sidebarCollapsed") === "true";
+  });
 
-const Sidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const { isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const location = useLocation(); 
+  useEffect(() => {
+    setIsCollapsed(true);
+    localStorage.setItem("sidebarCollapsed", "true"); 
+  }, [location.pathname]); 
 
   return (
     <div
-      className={`sidebar ${
+      className={`fixed top-0 left-0 h-screen bg-gray-800 dark:bg-gray-900 shadow-lg transition-all duration-300 ${
         isCollapsed ? "w-16" : "w-64"
-      } bg-gray-800 dark:bg-gray-800 h-screen fixed top-0 left-0 shadow-md transition-all duration-300`}
+      }`}
     >
       <div
         className="flex items-center justify-between p-4 cursor-pointer"
-        onClick={() => setIsCollapsed(!isCollapsed)}
+        onClick={() => {
+          setIsCollapsed(!isCollapsed);
+          localStorage.setItem("sidebarCollapsed", JSON.stringify(!isCollapsed));
+        }}
       >
         <FaBars size={24} className="text-gray-400" />
         {!isCollapsed && (
@@ -28,31 +35,25 @@ const Sidebar = () => {
           </h1>
         )}
       </div>
-
-      <div className="flex flex-col space-y-4 mt-6">
-        <Link to="/" className="flex items-center gap-4 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">
-          <IoHomeOutline size={20} />
-          {!isCollapsed && <span>Dashboard</span>}
-        </Link>
-        <Link to="/products" className="flex items-center gap-4 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">
-          <BsBoxSeam size={20} />
-          {!isCollapsed && <span>Products</span>}
-        </Link>
-        <Link to="/messages" className="flex items-center gap-4 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">
-          <IoChatbubbleOutline size={20} />
-          {!isCollapsed && <span>Messages</span>}
-        </Link>
-        <Link to="/calendar" className="flex items-center gap-4 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">
-          <BsCalendar size={20} />
-          {!isCollapsed && <span>Calendar</span>}
-        </Link>
-        <Link to="/settings" className="flex items-center gap-4 px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">
-          <FiSettings size={20} />
-          {!isCollapsed && <span>Settings</span>}
-        </Link>
-      </div>  
-
-      
+      <div className="mt-6 space-y-4">
+        {[
+          { to: "/", icon: <IoHomeOutline size={20} />, text: "Dashboard" },
+          { to: "/products", icon: <BsBoxSeam size={20} />, text: "Products" },
+          { to: "/messages", icon: <IoChatbubbleOutline size={20} />, text: "Messages" },
+          { to: "/calendar", icon: <BsCalendar size={20} />, text: "Calendar" },
+          { to: "/settings", icon: <FiSettings size={20} />, text: "Settings" },
+        ].map(({ to, icon, text }) => (
+          <Link
+            key={to}
+            to={to}
+            className={`flex items-center gap-4 px-4 py-2 rounded-lg transition-all duration-300 ${
+              location.pathname === to ? "bg-blue-500 text-white" : "hover:bg-gray-700 text-gray-300"
+            }`}
+          >
+            {icon}
+            {!isCollapsed && <span className="transition-opacity duration-300">{text}</span>}
+          </Link> ))}
+      </div>
     </div>
   );
 };
