@@ -24,7 +24,7 @@ const Wishlist = () => {
         const fetchedAuth0Id = res.data.data?.auth0Id || res.data.data?.user_id;
 
         if (fetchedAuth0Id) {
-          console.log("User ID fetched:", fetchedAuth0Id);
+          // console.log("User ID fetched:", fetchedAuth0Id);
           setAuth0Id(fetchedAuth0Id);
         } else {
           console.error("auth0Id is missing in response");
@@ -80,39 +80,39 @@ const Wishlist = () => {
   
 
   return (
-    <div>
-      <h2>My Wishlist</h2>
+    <div className="container mx-auto p-6 bg-gray-900 min-h-screen">
+      <h2 className="text-3xl font-bold text-center text-white mb-6">My Wishlist</h2>
+
       {wishlist.length === 0 ? (
-        <p>Your wishlist is empty.</p>
+        <p className="text-center text-gray-400 text-lg">Your wishlist is empty.</p>
       ) : (
-        <ul>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {wishlist.map((item) => (
-            <li key={item._id}>
-              {item.name} - ${item.price}
-              <img src={item.image} alt={item.name} style={{ width: "100px", height: "100px" }} />
-              <p>{item.description}</p>
-              <p>{item.category}</p>
-              <p>{item.brand}</p>
-              <p>{item.rating}</p>
+            <div
+              key={item._id}
+              className="bg-gray-800 rounded-lg shadow-lg p-5 flex flex-col items-center transform hover:scale-105 transition-transform"
+            >
+              <img
+                src={item.image}
+                alt={item.name}
+                className="w-28 h-28 object-cover rounded-lg border border-gray-700 mb-3"
+              />
+              <h3 className="text-lg font-semibold text-white">{item.name}</h3>
+              <p className="text-yellow-400 text-lg font-bold">₹{item.price}</p>
+              <p className="text-gray-400 text-sm">{item.description}</p>
+              <p className="text-gray-300 mt-2">Category: {item.category}</p>
+              <p className="text-gray-300">Brand: {item.brand}</p>
+              <p className="text-yellow-500 text-sm font-semibold">⭐ {item.rating} Ratings</p>
+
               <button
                 onClick={() => removeFromWishlist(item._id)}
-                style={{
-                  backgroundColor: "#ff4d4d",
-                  color: "white",
-                  padding: "8px 12px",
-                  borderRadius: "5px",
-                  border: "none",
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                  transition: "0.3s",
-                }}
-                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#cc0000")}
-                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#ff4d4d")}
-              > Remove from Wishlist
+                className="mt-3 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition-all w-full"
+              >
+                Remove from Wishlist
               </button>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

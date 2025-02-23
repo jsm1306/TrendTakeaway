@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth0 } from "@auth0/auth0-react"; 
+import { useAuth0 } from "@auth0/auth0-react";
+import { FaHeart } from "react-icons/fa";
 
 const Products: React.FC = () => {
   const { getAccessTokenSilently, user, isAuthenticated } = useAuth0();
@@ -10,22 +11,28 @@ const Products: React.FC = () => {
   const [wishlist, setWishlist] = useState<string[]>([]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/products", { headers: { "Accept": "application/json" } })
-      .then(response => {
-        if (Array.isArray(response.data)) {
-          setProducts(response.data);
-        } else if (response.data && Array.isArray(response.data.data)) {
-          setProducts(response.data.data);
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/products", {
+          headers: { Accept: "application/json" },
+        });
+        const data = response.data;
+        if (Array.isArray(data)) {
+          setProducts(data);
+        } else if (data && Array.isArray(data.data)) {
+          setProducts(data.data);
         } else {
           setError("Invalid data format received");
         }
-      })
-      .catch(error => {
+      } catch (error) {
         console.error("Error fetching products:", error);
         setError("Failed to fetch products");
-      });
+      }
+    };
+
     const fetchWishlist = async () => {
-      if (!user?.sub) return; 
+      if (!user?.sub) return;
+
       try {
         const token = await getAccessTokenSilently();
         const res = await axios.get(`http://localhost:5000/api/wishlist/user/${user.sub}`, {
@@ -33,17 +40,17 @@ const Products: React.FC = () => {
         });
 
         if (res.data.success && res.data.data.products) {
-          setWishlist(res.data.data.products.map((item: any) => item._id)); 
+          setWishlist([...new Set(res.data.data.products.map((item: any) => item._id))]);
         }
       } catch (err) {
         console.error("Error fetching wishlist:", err);
       }
     };
-    if (isAuthenticated) {
-      fetchWishlist();
-    }
-  }, [isAuthenticated, user?.sub]);
-//need to check toggle
+
+    fetchProducts();
+    if (isAuthenticated) fetchWishlist();
+  }, [isAuthenticated, user?.sub, getAccessTokenSilently]);
+
   const toggleWishlist = async (productId) => {
     if (!user?.sub) {
         alert("Please log in to add items to the wishlist.");
@@ -56,10 +63,8 @@ const Products: React.FC = () => {
 
         let updatedWishlist;
         if (wishlist.includes(productId)) {
-          
-            await axios.delete(`http://localhost:5000/api/wishlist/${productId}`, {
+            await axios.delete(`http://localhost:5000/api/wishlist/${user.sub}/${productId}`, {
                 headers: { Authorization: `Bearer ${token}` },
-                data: requestData 
             });
             updatedWishlist = wishlist.filter(id => id !== productId);
         } else {
@@ -76,8 +81,8 @@ const Products: React.FC = () => {
 };
 
   const handleCompare = (product: any) => {
-    if (selectedProducts.find(p => p._id === product._id)) {
-      setSelectedProducts(selectedProducts.filter(p => p._id !== product._id));
+    if (selectedProducts.some((p) => p._id === product._id)) {
+      setSelectedProducts(selectedProducts.filter((p) => p._id !== product._id));
     } else {
       if (selectedProducts.length < 4) {
         setSelectedProducts([...selectedProducts, product]);
@@ -98,41 +103,75 @@ const Products: React.FC = () => {
 
   if (error) return <p className="text-red-500 text-center mt-4">{error}</p>;
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold text-center mb-6">Products</h1>
-      <div className="text-center mb-4">
-        <p className="text-lg font-semibold">Selected for Comparison: {selectedProducts.length} / 4</p>
+    <div className="container mx-auto p-6 bg-gray-900 min-h-screen">
+      <h1 className="text-3xl font-bold text-center text-white mb-6">
+        Products
+      </h1>
+      <div className="text-center mb-6">
+        <p className="text-lg font-semibold text-gray-300">
+          Selected for Comparison: {selectedProducts.length} / 4
+        </p>
         {selectedProducts.length > 1 && (
           <button
             onClick={navigateToCompare}
-            className="bg-blue-500 text-white px-4 py-2 rounded mt-2">
+            className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg mt-3 transition-all"
+          >
             Compare Now
           </button>
         )}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products.map(product => (
-          <div key={product._id} className="bg-white shadow-lg rounded-lg overflow-hidden p-4">
-            <img src={product.image} className="w-full h-40 object-cover" />
-            <div className="p-2 text-center">
-              <h2 className="text-lg font-semibold text-black">{product.name}</h2>
-              <p className="text-gray-700">Price: <span className="font-bold">₹{product.price}</span></p>
-              <p className="text-yellow-500">Ratings: {product.ratings}⭐</p>
-              <button
-                onClick={() => toggleWishlist(product._id)}
-                className={`mt-2 px-4 py-2 rounded-md ${
-                  wishlist.includes(product._id) ? "bg-pink-500 text-white" : "bg-gray-200 text-black"
-                } transition-all duration-200`}>
-                {wishlist.includes(product._id) ? "💖 Wishlisted" : "🤍 Add to Wishlist"}
-              </button>
-              <button
-                onClick={() => handleCompare(product)}
-                className={`mt-2 px-4 py-2 rounded ${selectedProducts.find(p => p._id === product._id) ? 'bg-red-500' : 'bg-green-500'} text-white`}>
-                {selectedProducts.find(p => p._id === product._id) ? "Remove" : "Compare"}
-              </button>
+        {products
+          .filter((product) => product._id)
+          .map((product) => (
+            <div
+              key={product._id}
+              className="bg-gray-800 shadow-md rounded-lg overflow-hidden p-5 transition-transform transform hover:scale-105"
+            >
+              <img
+                src={product.image}
+                className="w-full h-40 object-cover rounded-lg"
+                alt={product.name}
+              />
+              <div className="p-3 text-center">
+                <h2 className="text-lg font-semibold text-white">
+                  {product.name}
+                </h2>
+                <p className="text-gray-400">
+                  Price:{" "}
+                  <span className="font-bold text-yellow-400">
+                    ₹{product.price}
+                  </span>
+                </p>
+                <p className="text-yellow-500">⭐ {product.ratings} Ratings</p>
+                <button
+                  onClick={() => toggleWishlist(product._id)}
+                  className={`mt-3 px-4 py-2 w-full rounded-lg font-semibold ${
+                    wishlist.includes(product._id)
+                      ? "bg-pink-500 hover:bg-pink-600 text-white"
+                      : "bg-gray-700 hover:bg-gray-600 text-white"
+                  } transition-all duration-300`}
+                >
+{wishlist.includes(product._id) ? (
+  <span style={{ color: 'pink' }}> Wishlisted</span>
+) : (
+  <span>  Add to Wishlist</span>
+)}                </button>
+                <button
+                  onClick={() => handleCompare(product)}
+                  className={`mt-3 px-4 py-2 w-full rounded-lg font-semibold ${
+                    selectedProducts.some((p) => p._id === product._id)
+                      ? "bg-red-500 hover:bg-red-600"
+                      : "bg-green-500 hover:bg-green-600"
+                  } text-white transition-all duration-300`}
+                >
+                  {selectedProducts.some((p) => p._id === product._id)
+                    ? " Remove"
+                    : " Compare"}
+                </button>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </div>
   );

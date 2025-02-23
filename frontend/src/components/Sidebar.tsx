@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { IoHomeOutline, IoChatbubbleOutline } from "react-icons/io5";
 import { BsBoxSeam, BsCalendar } from "react-icons/bs";
-import { FiSettings } from "react-icons/fi";
+import { FiSettings, FiShoppingCart } from "react-icons/fi";
 import { FaBars } from "react-icons/fa";
 const Sidebar: React.FC = () => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
@@ -42,7 +42,7 @@ const Sidebar: React.FC = () => {
           { to: "/messages", icon: <IoChatbubbleOutline size={20} />, text: "Messages" },
           { to: "/calendar", icon: <BsCalendar size={20} />, text: "Calendar" },
           { to: "/settings", icon: <FiSettings size={20} />, text: "Settings" },
-          { to: "/wishlist", icon: <FiSettings size={20} />, text: "WishList" },
+          { to: "/wishlist", icon: <FiShoppingCart size={20} />, text: "WishList" },
         ].map(({ to, icon, text }) => (
           <Link
             key={to}
