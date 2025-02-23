@@ -42,6 +42,7 @@ const Sidebar: React.FC = () => {
           { to: "/messages", icon: <IoChatbubbleOutline size={20} />, text: "Messages" },
           { to: "/calendar", icon: <BsCalendar size={20} />, text: "Calendar" },
           { to: "/settings", icon: <FiSettings size={20} />, text: "Settings" },
+          { to: "/wishlist", icon: <FiSettings size={20} />, text: "WishList" },
         ].map(({ to, icon, text }) => (
           <Link
             key={to}

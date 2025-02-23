@@ -1,6 +1,6 @@
 import User from '../models/user.model.js';
 
-// Create or update user after Auth0 login
+
 export const createUser = async (req, res) => {
   try {
     const { sub, name, email, picture } = req.body; // Extract data from Auth0
@@ -11,14 +11,11 @@ export const createUser = async (req, res) => {
       user = new User({ auth0Id: sub, name, email, picture });
       await user.save();
     }
-
     res.status(201).json(user);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
-
-// Get all users
 export const getUsers = async (req, res) => {
   try {
     const users = await User.find();
@@ -28,22 +25,42 @@ export const getUsers = async (req, res) => {
   }
 };
 
-// Update user (Optional, e.g., update role)
-export const updateUser = async (req, res) => {
+export const getUserByAuth0Id = async (req, res) => {
+  const { auth0Id } = req.params;
+
   try {
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    res.status(200).json(updatedUser);
+    const user = await User.findOne({ auth0Id });
+
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    res.status(200).json({ success: true, data: user });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ success: false, message: "Server error", error: error.message });
   }
 };
 
-// Delete user (Optional)
+export const updateUser = async (req, res) => {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server error", error: error.message });
+  }
+};
+
 export const deleteUser = async (req, res) => {
   try {
-    await User.findByIdAndDelete(req.params.id);
+    const user = await User.findByIdAndDelete(req.params.id);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
     res.status(204).send();
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(500).json({ success: false, message: "Server error", error: error.message });
   }
 };

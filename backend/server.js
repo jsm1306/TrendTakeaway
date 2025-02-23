@@ -3,8 +3,7 @@ import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import productRoutes from "./routes/product.routes.js";
 import userRoutes from './routes/user.routes.js';
-
-import checkJwt from "./utils/authMiddleware.js";
+import wishlistRoutes from './routes/wishlist.routes.js';
 import cors from "cors";
 
 dotenv.config(); 
@@ -25,6 +24,7 @@ connectDB().then(() => {
 
     app.use("/api/products", productRoutes);
     app.use('/api/users', userRoutes);
+    app.use('/api/wishlist', wishlistRoutes);
 
 
     app.listen(PORT, () => {
