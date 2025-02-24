@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
-import { FaHeart } from "react-icons/fa";
 
 const Products: React.FC = () => {
   const { getAccessTokenSilently, user, isAuthenticated } = useAuth0();
@@ -137,6 +136,7 @@ const Products: React.FC = () => {
                 <h2 className="text-lg font-semibold text-white">
                   {product.name}
                 </h2>
+                
                 <p className="text-gray-400">
                   Price:{" "}
                   <span className="font-bold text-yellow-400">
@@ -152,11 +152,13 @@ const Products: React.FC = () => {
                       : "bg-gray-700 hover:bg-gray-600 text-white"
                   } transition-all duration-300`}
                 >
-{wishlist.includes(product._id) ? (
-  <span style={{ color: 'pink' }}> Wishlisted</span>
-) : (
-  <span>  Add to Wishlist</span>
-)}                </button>
+                  {wishlist.includes(product._id) ? (
+                    <span style={{ color: 'pink' }}> Wishlisted</span>
+                  ) : (
+                    <span>  Add to Wishlist</span>
+                  )}
+                  
+                </button>
                 <button
                   onClick={() => handleCompare(product)}
                   className={`mt-3 px-4 py-2 w-full rounded-lg font-semibold ${
@@ -168,7 +170,18 @@ const Products: React.FC = () => {
                   {selectedProducts.some((p) => p._id === product._id)
                     ? " Remove"
                     : " Compare"}
-                </button>
+                </button>               <br></br> <br></br>
+                <p className="text-gray-400">
+                  URL:{" "}
+                  <a
+                    href={product.URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold text-yellow-400"
+                  >
+                    Link
+                  </a>
+                </p>
               </div>
             </div>
           ))}

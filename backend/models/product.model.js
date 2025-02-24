@@ -12,6 +12,7 @@ const ProductSchema = new mongoose.Schema({
   reviews: { type: [String] },
   image: { type: String },
   specifications: { type: String },
+  URL: { type: String },
 });
 
 // Create a model

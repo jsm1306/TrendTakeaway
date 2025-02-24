@@ -10,9 +10,10 @@ const App: React.FC = () => {
   return (
   
       <div className="flex">
-        <Sidebar />
+        
         <Header />
         <div className="ml-16 w-full p-4"> 
+        <Sidebar />
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<Products />} />
