@@ -32,35 +32,43 @@ const Discussion: React.FC<DiscussionProps> = ({ discussion }) => {
       console.error("Error liking discussion:", error);
     }
   };
-
+  const check=()=>{
+    console.log("Checking");
+  }
   const handleReply = async () => {
-    console.log("Replying to Discussion...");  
-
+    console.log("Replying to Discussion...");
+  
     if (!user) {
-      console.log("User not logged in!"); 
+      console.log("User not logged in!");
       return;
     }
-
-    console.log("Sending reply:", replyText); 
+  
+    console.log("Sending reply:", replyText);
     try {
-      const response = await fetch(`http://localhost:5000/api/discussions/${discussion._id}/reply`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user: { name: user.name, sub: user.sub },
-          text: replyText
-        }),
-      });
-
+      const response = await fetch(
+        `http://localhost:5000/api/discussions/${discussion._id}/reply`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user: { name: user.name, sub: user.sub },
+            text: replyText,
+          }),
+        }
+      );
+  
       const data = await response.json();
       console.log("Reply Response:", data);
-
-      setReplies([...replies, data]);
+  
+      setReplies((prevReplies) => [...prevReplies, data]);
+  
       setReplyText("");
     } catch (error) {
-      console.error("Error posting reply:", error); 
+      console.error("Error posting reply:", error);
     }
   };
+  
+  const [showReplyInput, setShowReplyInput] = useState(false);
 
   return (
     <div className="border p-4 mb-4 rounded">
@@ -70,20 +78,22 @@ const Discussion: React.FC<DiscussionProps> = ({ discussion }) => {
         <button onClick={handleLike} className="text-blue-500 mr-2">
           👍 {likes} {hasLiked ? "(Unlike)" : "(Like)"}
         </button>
-        <button onClick={() => setReplyText("")} className="text-gray-600">💬 Reply</button>
+        <button onClick={() => setShowReplyInput(!showReplyInput)} className="text-gray-600">
+  💬 Reply
+</button>
       </div>
-      {replyText !== "" && (
-        <div className="mt-2">
-          <textarea
-            value={replyText}
-            onChange={(e) => { console.log("Typing:", e.target.value); setReplyText(e.target.value); }}
-            className="w-full border p-2 rounded"
-            placeholder="Write a reply..."
-          />
-          <button onClick={handleReply} className="bg-gray-500 text-white px-4 py-2 mt-1 rounded">
-            Reply
-          </button>
-        </div>
+      {showReplyInput && (
+  <div className="mt-2">
+    <textarea
+      value={replyText}
+      onChange={(e) => setReplyText(e.target.value)}
+      className="w-full border p-2 rounded text-black"
+      placeholder="Write a reply..."
+    />
+    <button onClick={handleReply} className="bg-gray-500 text-white px-4 py-2 mt-1 rounded">
+      Reply
+    </button>
+  </div>
       )}
       {replies.length > 0 && (
         <div className="mt-4 border-l pl-4">
@@ -97,3 +107,5 @@ const Discussion: React.FC<DiscussionProps> = ({ discussion }) => {
 };
 
 export default Discussion;
+// need to add time date profile photo and should solve parent child cmnts problm
+// add crud operations to comments

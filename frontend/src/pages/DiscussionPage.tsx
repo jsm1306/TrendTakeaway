@@ -74,8 +74,9 @@ const DiscussionPage: React.FC = () => {
         </button>
       </div>
       {discussions.map((discussion) => (
-        <Discussion key={discussion._id} discussion={discussion} />
-      ))}
+  !discussion.parentId && <Discussion key={discussion._id} discussion={discussion} />
+))}
+
     </div>
   );
 };
