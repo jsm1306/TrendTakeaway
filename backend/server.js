@@ -5,6 +5,8 @@ import productRoutes from "./routes/product.routes.js";
 import userRoutes from './routes/user.routes.js';
 import wishlistRoutes from './routes/wishlist.routes.js';
 import cors from "cors";
+import discussionRoutes from './routes/discussion.routes.js';
+import pollRoutes from './routes/poll.routes.js';
 
 dotenv.config(); 
 
@@ -25,8 +27,8 @@ connectDB().then(() => {
     app.use("/api/products", productRoutes);
     app.use('/api/users', userRoutes);
     app.use('/api/wishlist', wishlistRoutes);
-
-
+    app.use('/api/polls', pollRoutes);
+    app.use('/api/discussions', discussionRoutes);
     app.listen(PORT, () => {
         console.log(`Server started at http://localhost:${PORT}`);
     });

@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
       if (isAuthenticated && user) {  
         try {
           const accessToken = await getAccessTokenSilently();
-          // console.log("Access Token:", accessToken);
+          console.log("Access Token:", accessToken);
           const res = await axios.post(
             "http://localhost:5000/api/users",
             {

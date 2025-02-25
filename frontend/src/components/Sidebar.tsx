@@ -5,29 +5,22 @@ import { BsBoxSeam, BsCalendar } from "react-icons/bs";
 import { FiSettings, FiShoppingCart } from "react-icons/fi";
 import { FaBars } from "react-icons/fa";
 const Sidebar: React.FC = () => {
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(() => {
-    return localStorage.getItem("sidebarCollapsed") === "true";
-  });
-
   const location = useLocation(); 
-  useEffect(() => {
-    setIsCollapsed(true);
-    localStorage.setItem("sidebarCollapsed", "true"); 
-  }, [location.pathname]); 
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(
+    () => localStorage.getItem("sidebarCollapsed") === "true"
+  );
+  const toggleSidebar = () => {
+    const newState = !isCollapsed;
+    setIsCollapsed(newState);
+    localStorage.setItem("sidebarCollapsed", JSON.stringify(newState));
+  };
 
   return (
     <div
       className={`fixed top-0 left-0 h-screen bg-gray-800 dark:bg-gray-900 shadow-lg transition-all duration-300 ${
         isCollapsed ? "w-16" : "w-64"
       }`}
-    >
-      <div
-        className="flex items-center justify-between p-4 cursor-pointer"
-        onClick={() => {
-          setIsCollapsed(!isCollapsed);
-          localStorage.setItem("sidebarCollapsed", JSON.stringify(!isCollapsed));
-        }}
-      >
+    ><div className="flex items-center justify-between p-4 cursor-pointer" onClick={toggleSidebar}>
         <FaBars size={24} className="text-gray-400" />
         {!isCollapsed && (
           <h1 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
@@ -39,7 +32,7 @@ const Sidebar: React.FC = () => {
         {[
           { to: "/", icon: <IoHomeOutline size={20} />, text: "Dashboard" },
           { to: "/products", icon: <BsBoxSeam size={20} />, text: "Products" },
-          { to: "/messages", icon: <IoChatbubbleOutline size={20} />, text: "Messages" },
+          { to: "/discussions", icon: <IoChatbubbleOutline size={20} />, text: "Discussions" },
           { to: "/calendar", icon: <BsCalendar size={20} />, text: "Calendar" },
           { to: "/settings", icon: <FiSettings size={20} />, text: "Settings" },
           { to: "/wishlist", icon: <FiShoppingCart size={20} />, text: "WishList" },
@@ -52,8 +45,9 @@ const Sidebar: React.FC = () => {
             }`}
           >
             {icon}
-            {!isCollapsed && <span className="transition-opacity duration-300">{text}</span>}
-          </Link> ))}
+            {!isCollapsed && <span>{text}</span>}
+          </Link>
+        ))}
       </div>
     </div>
   );

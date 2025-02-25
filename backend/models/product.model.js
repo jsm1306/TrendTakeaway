@@ -5,12 +5,13 @@ const ProductSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    enum: ["TV", "Headphones", "Smart Watch"],
+    enum: ["TV", "Headphones", "Smart Watch", "Fridge", "Laptop"],
   },
   price: { type: Number, required: true },
   ratings: { type: Number, min: 0, max: 5 },
   reviews: { type: [String] },
   image: { type: String },
+  brand: { type: String },
   specifications: { type: String },
   URL: { type: String },
 });
