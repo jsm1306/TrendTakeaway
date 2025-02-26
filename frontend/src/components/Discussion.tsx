@@ -47,7 +47,7 @@ const Discussion: React.FC<DiscussionProps> = ({ discussion }) => {
       const response = await axios.post(
         `http://localhost:5000/api/discussions/${discussion._id}/reply`,
         {
-          user: { name: user.name, sub: user.sub, picture: user.picture },
+          user: { name: user.name, sub: user.sub },
           text: replyText,
         }
       );
@@ -63,13 +63,7 @@ const Discussion: React.FC<DiscussionProps> = ({ discussion }) => {
   return (
     <div className=" w-full border p-4 mb-6 rounded-lg bg-gray-800 text-white shadow-lg">
       <div className="flex items-center mb-3">
-        {discussion.user.picture && (
-          <img
-            src={discussion.user.picture}
-            alt="Profile"
-            className="w-12 h-12 rounded-full mr-3 border border-gray-500"
-          />
-        )}
+        
         <div>
           <p className="font-semibold">{discussion.user.name}</p>
           <p className="text-xs text-gray-400">{moment(discussion.createdAt).fromNow()}</p>

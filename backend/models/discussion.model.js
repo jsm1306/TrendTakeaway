@@ -4,7 +4,7 @@ const DiscussionSchema = new mongoose.Schema({
   user: {
     name: { type: String, required: true },
     sub: { type: String, required: true }, //auth0id
-    picture : { type: String, required: true }
+    
   },
   text: { type: String, required: true },
   likes: [{ type: String }],
