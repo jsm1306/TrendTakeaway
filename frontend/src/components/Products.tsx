@@ -8,7 +8,7 @@ const Products: React.FC = () => {
   const [selectedProducts, setSelectedProducts] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [wishlist, setWishlist] = useState<string[]>([]);
-
+console.log("Hello")
   useEffect(() => {
     const fetchProducts = async () => {
       try {
