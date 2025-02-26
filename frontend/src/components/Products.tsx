@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
-
+import {Badge} from "./ui/badge";
 const Products: React.FC = () => {
   const { getAccessTokenSilently, user, isAuthenticated } = useAuth0();
   const [products, setProducts] = useState<any[]>([]);
@@ -112,11 +112,11 @@ const Products: React.FC = () => {
         </p>
         {selectedProducts.length > 1 && (
           <button
-            onClick={navigateToCompare}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg mt-3 transition-all"
-          >
-            Compare Now
-          </button>
+          onClick={navigateToCompare}
+          className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg mt-3 transition-all"
+        >
+          <Badge variant="default">Compare Now</Badge>
+        </button>
         )}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pr-4"> {/* Adjusted padding */}
