@@ -11,29 +11,17 @@ const Wishlist = () => {
       if (!isAuthenticated || !user) return;
 
       try {
-        // console.log("Fetching user ID:");
-        // console.log("Auth0 User Object:", user); 
-
         const token = await getAccessTokenSilently();
         const res = await axios.get(`http://localhost:5000/api/users/${user.sub}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        // console.log("data:", res.data);
-        // console.log("data[0]:", res.data.data);
         const fetchedAuth0Id = res.data.data?.auth0Id || res.data.data?.user_id;
-
-        if (fetchedAuth0Id) {
-          // console.log("User ID fetched:", fetchedAuth0Id);
-          setAuth0Id(fetchedAuth0Id);
-        } else {
-          console.error("auth0Id is missing in response");
-        }
+        if (fetchedAuth0Id) setAuth0Id(fetchedAuth0Id);
       } catch (err) {
         console.error("Error fetching userId:", err.response?.data || err.message);
       }
     };
-
     fetchUserId();
   }, [user, isAuthenticated, getAccessTokenSilently]);
 
@@ -45,13 +33,7 @@ const Wishlist = () => {
         `http://localhost:5000/api/wishlist/user/${auth0Id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
-      // console.log(" wishlist:", res.data);
-      // console.log("Products",res.data.data.products)
-      // console.log("Products[0]",res.data.data.products[0])
-      // console.log("wishlist b4",wishlist)
       const wishlistItems = res.data.data?.products || [];
-      // console.log("wishlist after adding",wishlist)
       setWishlist(wishlistItems);
       localStorage.setItem("wishlist", JSON.stringify(wishlistItems));
     } catch (err) {
@@ -66,47 +48,53 @@ const Wishlist = () => {
     try {
       const token = await getAccessTokenSilently();
       await axios.delete(
-        `http://localhost:5000/api/wishlist/${auth0Id}/${id}`,  
+        `http://localhost:5000/api/wishlist/${auth0Id}/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
-  
-      // console.log(`Deleted item ${id}, fetching updated wishlist...`);
-  
       setWishlist((prev) => prev.filter((item) => item._id !== id));
     } catch (error) {
       console.error("Error removing wishlist item:", error.response?.data || error.message);
     }
   };
-  
 
   return (
-    <div className="container mx-auto p-6 bg-gray-900 min-h-screen">
+    <div className=" mx-auto pl-[4rem]  bg-gray-900 min-h-screen pt-10">
       <h2 className="text-3xl font-bold text-center text-white mb-6">My Wishlist</h2>
-
       {wishlist.length === 0 ? (
-        <p className="text-center text-gray-400 text-lg">Your wishlist is empty.</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <p className="w-full text-center bg-gray-900 min-h-screen pt-10 text-gray-400 text-lg">Your wishlist is empty.</p>      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-4">
           {wishlist.map((item) => (
             <div
               key={item._id}
-              className="bg-gray-800 rounded-lg shadow-lg p-5 flex flex-col items-center transform hover:scale-105 transition-transform"
+              className="bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col items-center hover:scale-105 transition-transform"
             >
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-28 h-28 object-cover rounded-lg border border-gray-700 mb-3"
-              />
-              <h3 className="text-lg font-semibold text-white">{item.name}</h3>
+              <a href={item.url} target="_blank" rel="noopener noreferrer" className="w-full text-center">
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-full h-40 object-cover rounded-lg"
+                />
+              </a><br></br> <br></br>
+              <h3 className="text-lg font-semibold text-white text-center">{item.name}</h3>
               <p className="text-yellow-400 text-lg font-bold">₹{item.price}</p>
-              <p className="text-gray-400 text-sm">{item.description}</p>
+              <p className="text-gray-400 text-sm text-center">{item.description}</p>
               <p className="text-gray-300 mt-2">Category: {item.category}</p>
               <p className="text-gray-300">Brand: {item.brand}</p>
               <p className="text-yellow-500 text-sm font-semibold">⭐ {item.rating} Ratings</p>
-
+              <p className="text-gray-400">
+                  URL:{" "}
+                  <a
+                    href={item.URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-bold text-yellow-400"
+                  >
+                    Link
+                  </a>
+                </p>
               <button
                 onClick={() => removeFromWishlist(item._id)}
-                className="mt-3 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition-all w-full"
+                className="mt-4 bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg font-semibold transition-all w-full"
               >
                 Remove from Wishlist
               </button>

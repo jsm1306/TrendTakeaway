@@ -41,7 +41,7 @@ const Discussion: React.FC<DiscussionProps> = ({ discussion }) => {
   };
 
   const handleReply = async () => {
-    if (!user) return;
+    if (!user || !replyText.trim()) return;
 
     try {
       const response = await axios.post(
@@ -61,42 +61,57 @@ const Discussion: React.FC<DiscussionProps> = ({ discussion }) => {
   };
 
   return (
-    <div className="border p-4 mb-4 rounded-lg bg-gray-100 w-3/4 mx-auto"> 
-      <div className="flex items-center mb-2 text-black">
+    <div className=" w-full border p-4 mb-6 rounded-lg bg-gray-800 text-white shadow-lg">
+      <div className="flex items-center mb-3">
         {discussion.user.picture && (
-          <img src={discussion.user.picture} alt="Profile" className="w-10 h-10 rounded-full mr-2 text-black" />
+          <img
+            src={discussion.user.picture}
+            alt="Profile"
+            className="w-12 h-12 rounded-full mr-3 border border-gray-500"
+          />
         )}
         <div>
-          <p className="font-bold">{discussion.user.name}</p>
-          <p className="text-xs text-gray-500">{moment(discussion.createdAt).fromNow()}</p>
+          <p className="font-semibold">{discussion.user.name}</p>
+          <p className="text-xs text-gray-400">{moment(discussion.createdAt).fromNow()}</p>
         </div>
       </div>
 
-      <p className="text-gray-800">{discussion.text}</p>
+      <p className="text-lg">{discussion.text}</p>
 
-      <div className="flex items-center mt-2">
-        <button onClick={handleLike} className="text-blue-500 mr-4">
-          👍 {likes} {hasLiked ? "(Unlike)" : "(Like)"}
+      <div className="flex items-center mt-3 space-x-6">
+        <button
+          onClick={handleLike}
+          className={`px-4 py-2 rounded text-sm transition ${
+            hasLiked ? "bg-blue-500 text-white" : "bg-gray-600 text-gray-300"
+          }`}
+        >
+          👍 {likes} {hasLiked ? "Unlike" : "Like"}
         </button>
-        <button onClick={() => setShowReplyInput(!showReplyInput)} className="text-gray-600">
+        <button
+          onClick={() => setShowReplyInput(!showReplyInput)}
+          className="text-sm text-black hover:text-gray-300  transition"
+        >
           💬 Reply
         </button>
       </div>
       {showReplyInput && (
-        <div className="mt-2">
+        <div className="mt-3">
           <textarea
             value={replyText}
             onChange={(e) => setReplyText(e.target.value)}
-            className="w-full border p-2 rounded text-black"
+            className="w-full border p-3 rounded bg-gray-900 text-white"
             placeholder="Write a reply..."
           />
-          <button onClick={handleReply} className="bg-gray-500 text-white px-4 py-2 mt-1 rounded">
+          <button
+            onClick={handleReply}
+            className="bg-blue-600 text-white px-4 py-2 mt-2 rounded hover:bg-blue-700"
+          >
             Reply
           </button>
         </div>
       )}
       {replies.length > 0 && (
-        <div className="mt-4 pl-6 border-l-2 border-gray-300">
+        <div className="mt-4 border-l-4 border-gray-600 pl-4">
           {replies.map((reply) => (
             <Discussion key={reply._id} discussion={reply} />
           ))}

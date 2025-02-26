@@ -11,7 +11,7 @@ const Compare: React.FC = () => {
   }, []);
 
   return (
-    <div className="container mx-auto p-4">
+    <div className=" mx-auto p-10 pr-10">
       <h1 className="text-2xl font-bold text-center mb-6">Product Comparison</h1>
 
       {compareProducts.length === 0 ? (

@@ -102,8 +102,8 @@ const Products: React.FC = () => {
 
   if (error) return <p className="text-red-500 text-center mt-4">{error}</p>;
   return (
-    <div className="container mx-auto p-6 bg-gray-900 min-h-screen">
-      <h1 className="text-3xl font-bold text-center text-white mb-6">
+    <div className="bg-gray-900 pl-16">
+      <h1 className="text-3xl font-bold text-center text-white mb-6 pt-6">
         Products
       </h1>
       <div className="text-center mb-6">
@@ -119,13 +119,13 @@ const Products: React.FC = () => {
           </button>
         )}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pr-4"> {/* Adjusted padding */}
         {products
           .filter((product) => product._id)
           .map((product) => (
             <div
               key={product._id}
-              className="bg-gray-800 shadow-md rounded-lg overflow-hidden p-5 transition-transform transform hover:scale-105"
+              className="bg-gray-800 shadow-md rounded-lg overflow-hidden p-5 transition-transform hover:scale-105"
             >
               <img
                 src={product.image}
