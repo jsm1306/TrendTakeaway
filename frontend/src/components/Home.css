@@ -74,7 +74,13 @@
   background-color: #131a24;
   color: #f9f9f9;
 }
-
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #18202c;
+  color:#f9f9f9
+}
 .section.white {
   background-color: #f9f9f9;
   color: #131a24;

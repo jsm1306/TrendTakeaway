@@ -5,8 +5,8 @@ import Header from "./Header";
 
 const Home = () => {
   return (
-    <div className="home-layout pl-10">
-      <Header />
+<div className="home-layout pl-10">
+<Header />
       <div className="home-container pr-20">
         <h2 className="typing-title">Welcome to TrendTakeaway!</h2>
         <div className="content">
