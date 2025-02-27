@@ -68,3 +68,29 @@ export const likeDiscussion = async (req, res) => {
   }
 };
 
+ export const deleteDiscussion = async (req, res) => {
+  try {
+      const { id } = req.params;
+      const deletedDiscussion = await Discussion.findByIdAndDelete(id);
+      if (!deletedDiscussion) {
+          return res.status(404).json({ error: "Discussion not found" });
+      }
+      res.json({ message: "Discussion deleted successfully" });
+  } catch (error) {
+      console.error("Error deleting discussion:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+export const updateDiscussion = async (req, res) => {
+  try {
+    const { text } = req.body;
+    const updatedDiscussion = await Discussion.findByIdAndUpdate(
+      req.params.id,
+      { text },
+      { new: true }
+    );
+    res.json(updatedDiscussion);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update discussion" });
+  }
+}

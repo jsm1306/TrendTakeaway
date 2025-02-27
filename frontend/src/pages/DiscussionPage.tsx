@@ -35,27 +35,35 @@ const DiscussionPage: React.FC = () => {
   const handleCreateDiscussion = async () => {
     if (!newDiscussion.trim()) return;
     if (!isAuthenticated || !user) return console.error("User not authenticated");
-
-    console.log("User:", user);
-    console.log("Discussion Text:", newDiscussion);
-
+  
     try {
-      await axios.post("http://localhost:5000/api/discussions", {
+      const { data } = await axios.post("http://localhost:5000/api/discussions", {
         user: { name: user.name, sub: user.sub },
         text: newDiscussion,
       });
-      setNewDiscussion("");
-      fetchDiscussions();
+  
+      setNewDiscussion(""); // Clear input
+      fetchDiscussions(); // Refetch updated discussions
     } catch (error) {
       console.error("Error creating discussion:", error.response?.data || error);
     }
   };
-
+  
+  
+  const handleDeleteDiscussion = (id: string) => {
+    setDiscussions((prev) => prev.filter((discussion) => discussion._id !== id));
+  };
 
   if (!isAuthenticated) {
     return <div className="text-center text-red-500">You need to log in to view the discussions.</div>;
   }
-
+  const handleEditDiscussion = (id: string, newText: string) => {
+    setDiscussions((prev) =>
+      prev.map((discussion) =>
+        discussion._id === id ? { ...discussion, text: newText } : discussion
+      )
+    );
+  };
   return (
     <div className="p-6 max-w-2xl mx-auto mt-4 ml-10">
       <h1 className="text-2xl font-bold mt-4 ml-6">Discussions</h1>
@@ -74,7 +82,7 @@ const DiscussionPage: React.FC = () => {
         </button>
       </div>
       {discussions.map((discussion) => (
-  !discussion.parentId && <Discussion key={discussion._id} discussion={discussion} />
+  !discussion.parentId && <Discussion key={discussion._id} discussion={discussion} onDelete={handleDeleteDiscussion}  onEdit={handleEditDiscussion} />
 ))}
 
     </div>
