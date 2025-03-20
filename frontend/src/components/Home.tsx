@@ -1,7 +1,6 @@
-import React from "react";
 import "./Home.css";
-import image from "../assets/image.jpg";
 import Header from "./Header";
+import { TextHoverEffect } from "./ui/text-hover-effect";
 
 const Home = () => {
   return (
@@ -10,12 +9,7 @@ const Home = () => {
       <div className="home-container pr-20">
         <h2 className="typing-title">Welcome to TrendTakeaway!</h2>
         <div className="content">
-          <p className="description">
-          TrendTakeaway is your smart shopping companion, offering AI-powered 
-          product 
-          comparisons and personalized recommendations to help you make informed purchasing decisions.
-          </p>
-          <img src={image} alt="Business Promo" className="promo-image" />
+          <TextHoverEffect text="Find the Best Products" />
         </div>
 
         {/* New Sections */}
