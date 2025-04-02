@@ -34,28 +34,40 @@ const DiscussionPage: React.FC = () => {
 
   const handleCreateDiscussion = async () => {
     if (!newDiscussion.trim()) return;
-    if (!isAuthenticated || !user) return console.error("User not authenticated");
-  
+    if (!isAuthenticated || !user)
+      return console.error("User not authenticated");
+
     try {
-      const { data } = await axios.post("http://localhost:5000/api/discussions", {
-        user: { name: user.name, sub: user.sub },
-        text: newDiscussion,
-      });
-  
+      const { data } = await axios.post(
+        "http://localhost:5000/api/discussions",
+        {
+          user: { name: user.name, sub: user.sub },
+          text: newDiscussion,
+        }
+      );
+
       setNewDiscussion(""); // Clear input
       fetchDiscussions(); // Refetch updated discussions
     } catch (error) {
-      console.error("Error creating discussion:", error.response?.data || error);
+      console.error(
+        "Error creating discussion:",
+        error.response?.data || error
+      );
     }
   };
-  
-  
+
   const handleDeleteDiscussion = (id: string) => {
-    setDiscussions((prev) => prev.filter((discussion) => discussion._id !== id));
+    setDiscussions((prev) =>
+      prev.filter((discussion) => discussion._id !== id)
+    );
   };
 
   if (!isAuthenticated) {
-    return <div className="text-center text-red-500">You need to log in to view the discussions.</div>;
+    return (
+      <div className="text-center text-red-500">
+        You need to log in to view the discussions.
+      </div>
+    );
   }
   const handleEditDiscussion = (id: string, newText: string) => {
     setDiscussions((prev) =>
@@ -81,10 +93,17 @@ const DiscussionPage: React.FC = () => {
           Post
         </button>
       </div>
-      {discussions.map((discussion) => (
-  !discussion.parentId && <Discussion key={discussion._id} discussion={discussion} onDelete={handleDeleteDiscussion}  onEdit={handleEditDiscussion} />
-))}
-
+      {discussions.map(
+        (discussion, index) =>
+          !discussion.parentId && (
+            <Discussion
+              key={discussion._id || index}
+              discussion={discussion}
+              onDelete={handleDeleteDiscussion}
+              onEdit={handleEditDiscussion}
+            />
+          )
+      )}
     </div>
   );
 };
