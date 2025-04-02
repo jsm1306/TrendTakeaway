@@ -8,7 +8,7 @@ import { AiOutlineLike } from "react-icons/ai";
 interface DiscussionProps {
   discussion: {
     _id: string;
-    user: { name: string; sub: string; picture?: string };
+    user: { name: string; sub: string };
     text: string;
     likes: string[];
     replies: DiscussionProps["discussion"][];
@@ -49,7 +49,7 @@ const Discussion: React.FC<DiscussionProps> = ({
       await axios.post(
         `http://localhost:5000/api/discussions/${discussion._id}/like`,
         {
-          user: { name: user.name, sub: user.sub, picture: user.picture },
+          user: { name: user.name, sub: user.sub },
         }
       );
       setLikes((prev) => (hasLiked ? prev - 1 : prev + 1));
@@ -111,15 +111,8 @@ const Discussion: React.FC<DiscussionProps> = ({
   };
 
   return (
-    <div className="w-full border p-4 mb-6 rounded-lg bg-gray-800 text-white shadow-lg">
+    <div className="w-full border p-4 mb-6 rounded-lg bg-gray-800 text-white shadow-lg pl-5 pr-19">
       <div className="flex items-center mb-3">
-        {discussion.user.picture && (
-          <img
-            src={discussion.user.picture}
-            alt="Profile"
-            className="w-10 h-10 rounded-full mr-3"
-          />
-        )}
         <div>
           <p className="font-semibold">{discussion.user.name}</p>
           <p className="text-xs text-gray-400">
@@ -164,7 +157,7 @@ const Discussion: React.FC<DiscussionProps> = ({
         </button>
         <button
           onClick={() => setShowReplyInput(!showReplyInput)}
-          className="text-sm text-black hover:text-gray-300 transition"
+          className="text-sm text-black hover:text-gray-300 transition text-white"
         >
           💬 Reply
         </button>
@@ -208,13 +201,15 @@ const Discussion: React.FC<DiscussionProps> = ({
 
       {replies && replies.length > 0 && (
         <div className="mt-4 border-l-4 border-gray-600 pl-4">
-          {replies.map((reply, index) => (
-            <Discussion
-              key={reply._id || index}
-              discussion={reply}
-              onDelete={onDelete}
-            />
-          ))}
+          {replies.map((reply, index) =>
+            reply && reply.user ? (
+              <Discussion
+                key={reply._id || index}
+                discussion={reply}
+                onDelete={onDelete}
+              />
+            ) : null
+          )}
         </div>
       )}
     </div>

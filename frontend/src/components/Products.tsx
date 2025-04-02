@@ -12,11 +12,7 @@ import {
   CommandItem,
   CommandList,
 } from "./ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "./ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 const Products: React.FC = () => {
   const { getAccessTokenSilently, user, isAuthenticated } = useAuth0();
@@ -29,7 +25,14 @@ const Products: React.FC = () => {
   const [brand, setBrand] = useState<string>("");
   const [company, setCompany] = useState<string>("");
 
-  const categories = ["TV", "Headphones", "Smart Watch", "Fridge", "Laptop", "Oven"];
+  const categories = [
+    "TV",
+    "Headphones",
+    "Smart Watch",
+    "Fridge",
+    "Laptop",
+    "Oven",
+  ];
   const brands = ["LG", "boat", "Asus", "HP", "Zebronics", "Panasonic"];
   const companies = ["Amazon", "Flipkart"];
 
@@ -59,12 +62,17 @@ const Products: React.FC = () => {
 
       try {
         const token = await getAccessTokenSilently();
-        const res = await axios.get(`http://localhost:5000/api/wishlist/user/${user.sub}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await axios.get(
+          `http://localhost:5000/api/wishlist/user/${user.sub}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         if (res.data.success && res.data.data.products) {
-          setWishlist([...new Set(res.data.data.products.map((item: any) => item._id))]);
+          setWishlist([
+            ...new Set(res.data.data.products.map((item: any) => item._id)),
+          ]);
         }
       } catch (err) {
         console.error("Error fetching wishlist:", err);
@@ -77,36 +85,48 @@ const Products: React.FC = () => {
 
   const toggleWishlist = async (productId) => {
     if (!user?.sub) {
-        alert("Please log in to add items to the wishlist.");
-        return;
+      alert("Please log in to add items to the wishlist.");
+      return;
     }
 
     try {
-        const token = await getAccessTokenSilently();
-        const requestData = { auth0Id: user.sub, productId };
+      const token = await getAccessTokenSilently();
+      const requestData = { auth0Id: user.sub, productId };
 
-        let updatedWishlist;
-        if (wishlist.includes(productId)) {
-            await axios.delete(`http://localhost:5000/api/wishlist/${user.sub}/${productId}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            updatedWishlist = wishlist.filter(id => id !== productId);
-        } else {
-            await axios.post("http://localhost:5000/api/wishlist/add", requestData, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            updatedWishlist = [...wishlist, productId];
-        }
-        setWishlist(updatedWishlist);
-        localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
+      let updatedWishlist;
+      if (wishlist.includes(productId)) {
+        await axios.delete(
+          `http://localhost:5000/api/wishlist/${user.sub}/${productId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        updatedWishlist = wishlist.filter((id) => id !== productId);
+      } else {
+        await axios.post(
+          "http://localhost:5000/api/wishlist/add",
+          requestData,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        updatedWishlist = [...wishlist, productId];
+      }
+      setWishlist(updatedWishlist);
+      localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
     } catch (error) {
-        console.error("Error updating wishlist:", error.response?.data || error.message);
+      console.error(
+        "Error updating wishlist:",
+        error.response?.data || error.message
+      );
     }
-};
+  };
 
   const handleCompare = (product: any) => {
     if (selectedProducts.some((p) => p._id === product._id)) {
-      setSelectedProducts(selectedProducts.filter((p) => p._id !== product._id));
+      setSelectedProducts(
+        selectedProducts.filter((p) => p._id !== product._id)
+      );
     } else {
       if (selectedProducts.length < 4) {
         setSelectedProducts([...selectedProducts, product]);
@@ -139,10 +159,15 @@ const Products: React.FC = () => {
     return (
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-        <Button variant="outline" role="combobox" aria-expanded={open} className="w-[200px] justify-between text-black">
-  {value || `Select ${label}...`}
-  <ChevronsUpDown className="opacity-50" />
-</Button>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className="w-[200px] justify-between text-black"
+          >
+            {value || `Select ${label}...`}
+            <ChevronsUpDown className="opacity-50" />
+          </Button>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0">
           <Command>
@@ -160,7 +185,13 @@ const Products: React.FC = () => {
                     }}
                   >
                     {option}
-                    <Check className={value === option ? "ml-auto opacity-100" : "ml-auto opacity-0"} />
+                    <Check
+                      className={
+                        value === option
+                          ? "ml-auto opacity-100"
+                          : "ml-auto opacity-0"
+                      }
+                    />
                   </CommandItem>
                 ))}
               </CommandGroup>
@@ -173,67 +204,104 @@ const Products: React.FC = () => {
 
   if (error) return <p className="text-red-500 text-center mt-4">{error}</p>;
   return (
-<div className="bg-gray-900 pl-16 min-h-screen overflow-hidden min-w-screen">
-<h1 className="text-3xl font-bold text-center text-white mb-6 pt-6">Products</h1>
-{selectedProducts.length > 1 && (
-          <button
-            onClick={navigateToCompare}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg mt-3 transition-all"
-          >
-            Compare Now
-          </button>
-        )}
+    <div className="bg-gray-900 pl-16 min-h-screen overflow-hidden min-w-screen">
+      <h1 className="text-3xl font-bold text-center text-white mb-6 pt-6">
+        Products
+      </h1>
+      {selectedProducts.length > 1 && (
+        <button
+          onClick={navigateToCompare}
+          className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg mt-3 transition-all"
+        >
+          Compare Now
+        </button>
+      )}
       <div className="flex justify-center gap-4 mb-6">
-        <FilterCombobox label="Category" options={categories} value={category} setValue={setCategory} />
-        <FilterCombobox label="Brand" options={brands} value={brand} setValue={setBrand} />
-        <FilterCombobox label="Company" options={companies} value={company} setValue={setCompany} />
+        <FilterCombobox
+          label="Category"
+          options={categories}
+          value={category}
+          setValue={setCategory}
+        />
+        <FilterCombobox
+          label="Brand"
+          options={brands}
+          value={brand}
+          setValue={setBrand}
+        />
+        <FilterCombobox
+          label="Company"
+          options={companies}
+          value={company}
+          setValue={setCompany}
+        />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pr-4">
-        
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pr-5 pl-5">
         {filteredProducts.map((product) => (
-          <div key={product._id} className="bg-gray-800 shadow-md rounded-lg overflow-hidden p-5 transition-transform hover:scale-105">
-            <img src={product.image} className="w-full h-40 object-cover rounded-lg" alt={product.name} />
+          <div
+            key={product._id}
+            className="bg-gray-800 shadow-md rounded-lg overflow-hidden p-5 transition-transform hover:scale-105"
+          >
+            <img
+              src={product.image}
+              className="w-full h-40 object-cover rounded-lg"
+              alt={product.name}
+            />
             <div className="p-3 text-center">
-              <h2 className="text-lg font-semibold text-white">{product.name}</h2>
-              <p className="text-gray-400">Price: <span className="font-bold text-yellow-400">₹{product.price}</span></p>
-              <p className="text-yellow-500">⭐ {product.ratings} Ratings</p>
+              <h2 className="text-lg font-semibold text-white">
+                {product.name}
+              </h2>
+              <p className="text-gray-400">
+                Price:{" "}
+                <span className="font-bold text-yellow-400">
+                  ₹{product.price}
+                </span>
+              </p>
+              <p className="text-yellow-500">⭐️ {product.ratings} Ratings</p>
               <p className="text-gray-400">Company: {product.company}</p>
               <p className="text-gray-400">Brand: {product.brand}</p>
               <p className="text-gray-400">Category: {product.category}</p>
-              <p className="text-gray-400">URL: <a href={product.URL} target="_blank" rel="noopener noreferrer" className="font-bold text-yellow-400">Link</a></p>
-              
+              <p className="text-gray-400">
+                URL:{" "}
+                <a
+                  href={product.URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-yellow-400"
+                >
+                  Link
+                </a>
+              </p>
             </div>
-            
-        <button
-                  onClick={() => toggleWishlist(product._id)}
-                  className={`mt-3 px-4 py-2 w-full rounded-lg font-semibold ${
-                    wishlist.includes(product._id)
-                      ? "bg-pink-500 hover:bg-pink-600 text-white"
-                      : "bg-gray-700 hover:bg-gray-600 text-white"
-                  } transition-all duration-300`}
-                >
-                  {wishlist.includes(product._id) ? (
-                    <span style={{ color: 'pink' }}> Wishlisted</span>
-                  ) : (
-                    <span>  Add to Wishlist</span>
-                  )}
-                  
-                </button>
-                <button
-                  onClick={() => handleCompare(product)}
-                  className={`mt-3 px-4 py-2 w-full rounded-lg font-semibold ${
-                    selectedProducts.some((p) => p._id === product._id)
-                      ? "bg-red-500 hover:bg-red-600"
-                      : "bg-green-500 hover:bg-green-600"
-                  } text-white transition-all duration-300`}
-                >
-                  {selectedProducts.some((p) => p._id === product._id)
-                    ? " Remove"
-                    : " Compare"}
-                </button>               <br></br> <br></br>
+            <button
+              onClick={() => toggleWishlist(product._id)}
+              className={`mt-3 px-4 py-2 w-full rounded-lg font-semibold ${
+                wishlist.includes(product._id)
+                  ? "bg-pink-500 hover:bg-pink-600 text-white"
+                  : "bg-gray-700 hover:bg-gray-600 text-white"
+              } transition-all duration-300`}
+            >
+              {wishlist.includes(product._id) ? (
+                <span style={{ color: "pink" }}> Wishlisted</span>
+              ) : (
+                <span> Add to Wishlist</span>
+              )}
+            </button>
+            <button
+              onClick={() => handleCompare(product)}
+              className={`mt-3 px-4 py-2 w-full rounded-lg font-semibold ${
+                selectedProducts.some((p) => p._id === product._id)
+                  ? "bg-red-500 hover:bg-red-600"
+                  : "bg-green-500 hover:bg-green-600"
+              } text-white transition-all duration-300`}
+            >
+              {selectedProducts.some((p) => p._id === product._id)
+                ? " Remove"
+                : " Compare"}
+            </button>{" "}
+            <br></br> <br></br>
           </div>
         ))}
-        
       </div>
     </div>
   );

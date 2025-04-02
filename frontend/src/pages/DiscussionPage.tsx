@@ -77,7 +77,7 @@ const DiscussionPage: React.FC = () => {
     );
   };
   return (
-    <div className="p-6 max-w-2xl mx-auto mt-4 ml-10">
+    <div className="p-6 max-w-2xl mx-auto mt-4 ml-14">
       <h1 className="text-2xl font-bold mt-4 ml-6">Discussions</h1>
       <div className="mb-4">
         <textarea
