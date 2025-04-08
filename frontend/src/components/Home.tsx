@@ -12,9 +12,9 @@ const Home = () => {
     { text: "TrendTakeaway", className: "text-blue-500" },
   ];
   return (
-    <div className="home-layout pl-16 ">
+    <div className="home-layout ">
       <Header />
-      <div className="home-container pr-14">
+      <div className="home-container">
         <div className="hero">
           <TypewriterEffect words={words} />
         </div>

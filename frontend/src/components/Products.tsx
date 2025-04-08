@@ -169,7 +169,7 @@ const Products: React.FC = () => {
             <ChevronsUpDown className="opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[200px] p-0">
+        <PopoverContent className="w-[200px]">
           <Command>
             <CommandInput placeholder={`Search ${label}...`} className="h-9" />
             <CommandList>
@@ -204,7 +204,7 @@ const Products: React.FC = () => {
 
   if (error) return <p className="text-red-500 text-center mt-4">{error}</p>;
   return (
-    <div className="bg-gray-900 pl-16 min-h-screen overflow-hidden min-w-screen">
+    <div className="bg-gray-900 min-h-screen overflow-hidden min-w-screen">
       <h1 className="text-3xl font-bold text-center text-white mb-6 pt-6">
         Products
       </h1>
