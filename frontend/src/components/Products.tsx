@@ -4,6 +4,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Badge } from "./ui/badge";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Button } from "./ui/button";
+import { Link } from "react-router-dom";
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
 import {
   Command,
   CommandEmpty,
@@ -39,16 +42,18 @@ const Products: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/products", {
+        const response = await axios.get(`${baseUrl}/products`, {
           headers: { Accept: "application/json" },
         });
         const data = response.data;
         if (Array.isArray(data)) {
-          setProducts(data);
-          setFilteredProducts(data);
+          const reversedData = [...data].reverse();
+          setProducts(reversedData);
+          setFilteredProducts(reversedData);
         } else if (data && Array.isArray(data.data)) {
-          setProducts(data.data);
-          setFilteredProducts(data.data);
+          const reversedData = [...data.data].reverse();
+          setProducts(reversedData);
+          setFilteredProducts(reversedData);
         } else {
           setError("Invalid data format received");
         }
@@ -62,12 +67,9 @@ const Products: React.FC = () => {
 
       try {
         const token = await getAccessTokenSilently();
-        const res = await axios.get(
-          `http://localhost:5000/api/wishlist/user/${user.sub}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const res = await axios.get(`${baseUrl}/wishlist/user/${user.sub}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         if (res.data.success && res.data.data.products) {
           setWishlist([
@@ -95,30 +97,20 @@ const Products: React.FC = () => {
 
       let updatedWishlist;
       if (wishlist.includes(productId)) {
-        await axios.delete(
-          `http://localhost:5000/api/wishlist/${user.sub}/${productId}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        await axios.delete(`${baseUrl}/wishlist/${user.sub}/${productId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         updatedWishlist = wishlist.filter((id) => id !== productId);
       } else {
-        await axios.post(
-          "http://localhost:5000/api/wishlist/add",
-          requestData,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        await axios.post(`${baseUrl}/wishlist/add`, requestData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         updatedWishlist = [...wishlist, productId];
       }
       setWishlist(updatedWishlist);
       localStorage.setItem("wishlist", JSON.stringify(updatedWishlist));
     } catch (error) {
-      console.error(
-        "Error updating wishlist:",
-        error.response?.data || error.message
-      );
+      console.error("Error updating wishlist:");
     }
   };
 
@@ -209,12 +201,22 @@ const Products: React.FC = () => {
         Products
       </h1>
       {selectedProducts.length > 1 && (
-        <button
-          onClick={navigateToCompare}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-5 py-2 rounded-lg mt-3 transition-all"
+        <div
+          style={{
+            position: "fixed",
+            top: "60px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 1000,
+          }}
         >
-          Compare Now
-        </button>
+          <button
+            onClick={navigateToCompare}
+            className="bg-blue-500 text-white px-4 py-2 rounded shadow-lg hover:bg-blue-600"
+          >
+            Compare {selectedProducts.length} Products
+          </button>
+        </div>
       )}
       <div className="flex justify-center gap-4 mb-6">
         <FilterCombobox
@@ -261,6 +263,8 @@ const Products: React.FC = () => {
               <p className="text-gray-400">Company: {product.company}</p>
               <p className="text-gray-400">Brand: {product.brand}</p>
               <p className="text-gray-400">Category: {product.category}</p>
+              <Link to={`/product/${product._id}`}>View Details</Link>
+
               <p className="text-gray-400">
                 URL:{" "}
                 <a
@@ -289,16 +293,16 @@ const Products: React.FC = () => {
             </button>
             <button
               onClick={() => handleCompare(product)}
-              className={`mt-3 px-4 py-2 w-full rounded-lg font-semibold ${
+              className={` w-full  ${
                 selectedProducts.some((p) => p._id === product._id)
                   ? "bg-red-500 hover:bg-red-600"
                   : "bg-green-500 hover:bg-green-600"
-              } text-white transition-all duration-300`}
+              } text-white transition-all duration-300 px-4 py-2 rounded`}
             >
               {selectedProducts.some((p) => p._id === product._id)
                 ? " Remove"
                 : " Compare"}
-            </button>{" "}
+            </button>
             <br></br> <br></br>
           </div>
         ))}

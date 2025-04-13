@@ -5,6 +5,7 @@ import { CardContainer, CardBody, CardItem } from "./ui/3d-card";
 import { Lamp } from "lucide-react";
 import { TypewriterEffect } from "./ui/typewriter-effect";
 import LampDemo from "./ui/lamp";
+import DotBackgroundDemo from "./ui/dotbackgrounddemo";
 const Home = () => {
   const words = [
     { text: "Welcome ", className: "text-white" },

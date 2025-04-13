@@ -3,7 +3,7 @@ import { Sidebar, SidebarBody, SidebarLink } from "./components/ui/sidebar"; // 
 import { IoHomeOutline, IoChatbubbleOutline } from "react-icons/io5";
 import { BsBoxSeam, BsCalendar } from "react-icons/bs";
 import { FiSettings, FiShoppingCart } from "react-icons/fi";
-
+import ProductDetails from "./components/ProductDetails";
 import Products from "./components/Products";
 import Home from "./components/Home";
 import Header from "./components/Header";
@@ -64,6 +64,7 @@ const App: React.FC = () => {
             <Route path="/discussions" element={<DiscussionPage />} />
             <Route path="/calendar" element={<div>Calendar Page</div>} />
             <Route path="/settings" element={<div>Settings Page</div>} />
+            <Route path="/product/:id" element={<ProductDetails />} />
           </Routes>
         </main>
       </div>

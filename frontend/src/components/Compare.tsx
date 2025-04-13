@@ -11,11 +11,15 @@ const Compare: React.FC = () => {
   }, []);
 
   return (
-    <div className="mx-auto p-10" style={{ marginLeft: '40px' }}>
-      <h1 className="text-2xl font-bold text-center mb-6">Product Comparison</h1>
+    <div className="mx-auto p-10" style={{ marginLeft: "40px" }}>
+      <h1 className="text-2xl font-bold text-center mb-6">
+        Product Comparison
+      </h1>
 
       {compareProducts.length === 0 ? (
-        <p className="text-center text-gray-500">No products selected for comparison.</p>
+        <p className="text-center text-gray-500">
+          No products selected for comparison.
+        </p>
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full border-collapse border border-gray-300">
@@ -24,7 +28,11 @@ const Compare: React.FC = () => {
                 <th className="border p-2">Description</th>
                 {compareProducts.map((product) => (
                   <th key={product._id} className="border p-2">
-                    <img src={product.image} className="w-20 h-20 object-cover mx-auto" alt={product.name} />
+                    <img
+                      src={product.image}
+                      className="w-20 h-20 object-cover mx-auto"
+                      alt={product.name}
+                    />
                   </th>
                 ))}
               </tr>
@@ -47,10 +55,39 @@ const Compare: React.FC = () => {
                 ))}
               </tr>
               <tr>
+                <td className="border p-2 text-center font-bold">Brand</td>
+                {compareProducts.map((product) => (
+                  <td
+                    key={product._id}
+                    className="border p-2 text-center text-yellow-500"
+                  >
+                    {product.brand}
+                  </td>
+                ))}
+              </tr>
+              <tr>
                 <td className="border p-2 text-center font-bold">Ratings</td>
                 {compareProducts.map((product) => (
-                  <td key={product._id} className="border p-2 text-center text-yellow-500">
+                  <td
+                    key={product._id}
+                    className="border p-2 text-center text-yellow-500"
+                  >
                     {product.ratings}⭐
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td className="border p-2 text-center font-bold">
+                  Specifications
+                </td>
+                {compareProducts.map((product) => (
+                  <td
+                    key={product._id}
+                    className="border p-2 text-center text-yellow-500"
+                  >
+                    {product.specifications.split(",").map((spec, index) => (
+                      <div key={index}>{spec.trim()}</div>
+                    ))}
                   </td>
                 ))}
               </tr>
@@ -60,9 +97,14 @@ const Compare: React.FC = () => {
                   <td key={product._id} className="border p-2 text-center">
                     <button
                       onClick={() => {
-                        const updatedProducts = compareProducts.filter((p) => p._id !== product._id);
+                        const updatedProducts = compareProducts.filter(
+                          (p) => p._id !== product._id
+                        );
                         setCompareProducts(updatedProducts);
-                        localStorage.setItem("compareProducts", JSON.stringify(updatedProducts));
+                        localStorage.setItem(
+                          "compareProducts",
+                          JSON.stringify(updatedProducts)
+                        );
                       }}
                       className="bg-red-500 text-white px-4 py-2 rounded"
                     >
@@ -77,7 +119,10 @@ const Compare: React.FC = () => {
       )}
 
       <div className="text-center mt-4">
-        <button onClick={() => window.history.back()} className="bg-gray-500 text-white px-4 py-2 rounded">
+        <button
+          onClick={() => window.history.back()}
+          className="bg-gray-500 text-white px-4 py-2 rounded"
+        >
           Back
         </button>
       </div>
