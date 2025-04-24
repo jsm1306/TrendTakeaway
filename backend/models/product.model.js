@@ -5,7 +5,23 @@ const ProductSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true,
-    enum: ["TV", "Headphones", "Smart Watch", "Fridge", "Laptop", "Oven"],
+    enum: [
+      "TV",
+      "Headphones",
+      "Smart Watch",
+      "Fridge",
+      "Laptop",
+      "Oven",
+      "Tablet",
+      "Others",
+      "Cooler",
+      "HairDryers",
+      "Washing Machine",
+      "AC",
+      "Phone",
+      "Fan",
+      "Electronics",
+    ],
   },
   price: { type: Number, required: true },
   ratings: { type: Number, min: 0, max: 5 },
@@ -15,6 +31,11 @@ const ProductSchema = new mongoose.Schema({
   company: { type: String },
   specifications: { type: String },
   URL: { type: String },
+  sentiment: {
+    fullText: { type: String },
+    positivePercentage: { type: Number },
+    confidencePercentage: { type: Number },
+  },
 });
 
 // Create a model

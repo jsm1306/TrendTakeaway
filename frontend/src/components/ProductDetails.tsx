@@ -45,6 +45,7 @@ function ProductDetails() {
               <span className="font-semibold text-white">Company:</span>{" "}
               {product.company}
             </p>
+
             <p>
               <span className="font-semibold text-white">Details:</span>{" "}
               {product.specifications}
@@ -64,7 +65,15 @@ function ProductDetails() {
         </div>
       </div>
       {/* bg-gray-800 mt-40 ml-5 mr-5 p-6 rounded-lg shadow-lg  mx-auto */}
-
+      <div className="bg-gray-800 mt-40 ml-5 mr-5 p-6 rounded-lg shadow-xl mx-auto">
+        <h2 className="text-3xl font-bold mb-20 text-yellow-400 text">
+          Sentiment Analysis
+        </h2>
+        <p>
+          <span className="font-semibold text-white">Sentiment:</span>{" "}
+          {product.sentiment.fullText}
+        </p>
+      </div>
       <div className="bg-gray-800 mt-40 ml-5 mr-5 p-6 rounded-lg shadow-xl max-w-8xl">
         <h2 className="text-3xl font-bold mb-20 text-yellow-400 text-center">
           Customer Reviews
