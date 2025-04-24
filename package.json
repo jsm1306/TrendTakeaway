@@ -30,6 +30,7 @@
     "mongoose": "^8.9.5",
     "openai": "^4.96.0",
     "puppeteer": "^24.6.0",
+    "recharts": "^2.15.3",
     "sentiment": "^5.0.2"
   }
 }

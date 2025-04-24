@@ -18,7 +18,7 @@ interface DiscussionProps {
   onReply?: () => void;
   onEdit?: (id: string, newText: string) => void;
 }
-
+const baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 const Discussion: React.FC<DiscussionProps> = ({
   discussion,
   onDelete,
@@ -46,12 +46,9 @@ const Discussion: React.FC<DiscussionProps> = ({
   const handleLike = async () => {
     if (!user) return;
     try {
-      await axios.post(
-        `http://localhost:5000/api/discussions/${discussion._id}/like`,
-        {
-          user: { name: user.name, sub: user.sub },
-        }
-      );
+      await axios.post(`${baseURL}/discussions/${discussion._id}/like`, {
+        user: { name: user.name, sub: user.sub },
+      });
       setLikes((prev) => (hasLiked ? prev - 1 : prev + 1));
       setHasLiked((prev) => !prev);
     } catch (error) {
@@ -64,7 +61,7 @@ const Discussion: React.FC<DiscussionProps> = ({
 
     try {
       const response = await axios.post(
-        `http://localhost:5000/api/discussions/${discussion._id}/reply`,
+        `${baseURL}/discussions/${discussion._id}/reply`,
         { user: { name: user.name, sub: user.sub }, text: replyText }
       );
 
@@ -83,9 +80,7 @@ const Discussion: React.FC<DiscussionProps> = ({
     }
 
     try {
-      await axios.delete(
-        `http://localhost:5000/api/discussions/${discussion._id}`
-      );
+      await axios.delete(`${baseURL}/discussions/${discussion._id}`);
       if (onDelete) onDelete(discussion._id);
     } catch (error) {
       console.error("Error deleting discussion:", error);
@@ -96,12 +91,9 @@ const Discussion: React.FC<DiscussionProps> = ({
     if (!user || user.sub !== discussion.user.sub) return;
 
     try {
-      await axios.put(
-        `http://localhost:5000/api/discussions/${discussion._id}`,
-        {
-          text: updatedText,
-        }
-      );
+      await axios.put(`${baseURL}/discussions/${discussion._id}`, {
+        text: updatedText,
+      });
 
       setIsEditing(false);
       onEdit && onEdit(discussion._id, updatedText);
