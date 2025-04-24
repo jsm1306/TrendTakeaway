@@ -35,6 +35,10 @@ const Products: React.FC = () => {
     "Fridge",
     "Laptop",
     "Oven",
+    "Phone",
+    "Others",
+    "HairDryers",
+    "Cooler",
   ];
   const brands = ["LG", "boat", "Asus", "HP", "Zebronics", "Panasonic"];
   const companies = ["Amazon", "Flipkart"];

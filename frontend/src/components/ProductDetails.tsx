@@ -74,6 +74,15 @@ function ProductDetails() {
           {product.sentiment.fullText}
         </p>
       </div>
+      <div className="bg-gray-800 mt-40 ml-5 mr-5 p-6 rounded-lg shadow-xl mx-auto">
+        <h2 className="text-3xl font-bold mb-20 text-yellow-400 text">
+          Summarized Reviews:
+        </h2>
+        <p>
+          <span className="font-semibold text-white">Summary:</span>{" "}
+          {product.sentiment.summary}
+        </p>
+      </div>
       <div className="bg-gray-800 mt-40 ml-5 mr-5 p-6 rounded-lg shadow-xl max-w-8xl">
         <h2 className="text-3xl font-bold mb-20 text-yellow-400 text-center">
           Customer Reviews

@@ -35,6 +35,7 @@ const ProductSchema = new mongoose.Schema({
     fullText: { type: String },
     positivePercentage: { type: Number },
     confidencePercentage: { type: Number },
+    summary: String,
   },
 });
 
