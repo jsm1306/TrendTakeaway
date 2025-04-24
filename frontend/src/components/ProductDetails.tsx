@@ -63,13 +63,36 @@ function ProductDetails() {
           </div>
         </div>
       </div>
+      {/* bg-gray-800 mt-40 ml-5 mr-5 p-6 rounded-lg shadow-lg  mx-auto */}
 
-      {/* Customer Reviews Section */}
-      <div className="bg-gray-800 mt-40 ml-5 mr-5 p-6 rounded-lg shadow-lg  mx-auto">
-        <h2 className="text-2xl font-bold mb-4 text-yellow-400">
+      <div className="bg-gray-800 mt-40 ml-5 mr-5 p-6 rounded-lg shadow-xl max-w-8xl">
+        <h2 className="text-3xl font-bold mb-20 text-yellow-400 text-center">
           Customer Reviews
         </h2>
-        <p className="text-gray-300">{product.reviews}</p>
+
+        {product.reviews && product.reviews.length > 0 ? (
+          <div className="space-y-4">
+            {product.reviews.map((review: string, index: number) => (
+              <div
+                key={index}
+                className="bg-gray-700 p-4 rounded-md shadow-md border-l-4 border-yellow-400"
+              >
+                <div className="flex items-start gap-2">
+                  <svg
+                    className="w-6 h-6 text-yellow-400 flex-shrink-0 mt-1"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9.049 2.927C9.469 1.875 10.531 1.875 10.951 2.927l1.286 3.536a1 1 0 00.95.69h3.462c1.1 0 1.548 1.357.707 2.036l-2.8 2.158a1 1 0 00-.364 1.118l1.286 3.536c.42 1.052-.871 1.918-1.781 1.24l-2.8-2.158a1 1 0 00-1.214 0l-2.8 2.158c-.91.678-2.201-.188-1.781-1.24l1.286-3.536a1 1 0 00-.364-1.118L2.644 9.189c-.841-.679-.393-2.036.707-2.036h3.462a1 1 0 00.95-.69L9.049 2.927z" />
+                  </svg>
+                  <p className="text-gray-200 leading-relaxed">{review}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-300 text-center">No reviews available.</p>
+        )}
       </div>
     </div>
   );
