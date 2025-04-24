@@ -1,12 +1,14 @@
-// frontend/src/components/ProductDetails.tsx
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 function ProductDetails() {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<any>(null);
+  const [recommendations, setRecommendations] = useState<any[]>([]);
 
   useEffect(() => {
     fetch(`${baseUrl}/products/${id}`)
@@ -14,7 +16,32 @@ function ProductDetails() {
       .then((data) => setProduct(data))
       .catch((error) => console.error("Error fetching product:", error));
   }, [id]);
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      if (!product) return;
+      try {
+        const response = await axios.get(
+          `${baseUrl}/products/recommendations/${product.category}`
+        );
+        // Ensure response.data is an array before setting state
+        if (Array.isArray(response.data)) {
+          setRecommendations(response.data);
+        } else {
+          setRecommendations([]);
+          console.error("Recommendations data is not an array:", response.data);
+        }
+      } catch (error) {
+        if (error.response) {
+          console.error("Error fetching recommendations:", error.response.data);
+        } else {
+          console.error("Error fetching recommendations:", error.message);
+        }
+        setRecommendations([]);
+      }
+    };
 
+    fetchRecommendations();
+  }, [product]);
   if (!product) return <div className="text-white p-10">Loading...</div>;
 
   return (
@@ -64,6 +91,47 @@ function ProductDetails() {
           </div>
         </div>
       </div>
+      <div className="bg-gray-800 mt-40 ml-5 mr-5 p-6 rounded-lg shadow-xl mx-auto">
+        <h2 className="text-white text-2xl font-bold mb-8 text-center">
+          Recommended Products
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+          {Array.isArray(recommendations) &&
+            recommendations.map((recProduct) => (
+              <div
+                key={recProduct._id}
+                className="bg-gray-900 rounded-xl shadow-lg overflow-hidden transform transition duration-300 hover:scale-105 hover:shadow-yellow-500 "
+              >
+                <img
+                  src={recProduct.image}
+                  alt={recProduct.name}
+                  className="w-full h-70 object-cover border-b border-gray-700"
+                />
+                <div className="p-4 space-y-2">
+                  <h3 className="text-xl font-semibold text-white">
+                    {recProduct.name}
+                  </h3>
+                  <p className="text-green-400 font-medium">
+                    Price: ₹{recProduct.price}
+                  </p>
+                  <p className="text-gray-300">
+                    Positive Sentiment:{" "}
+                    <span className="text-yellow-300 font-semibold">
+                      {recProduct.sentiment.positivePercentage}%
+                    </span>
+                  </p>
+                  <p className="text-yellow-400">
+                    Ratings: {recProduct.ratings} ⭐
+                  </p>
+                  <p className="text-blue-400">
+                    <Link to={`/product/${recProduct._id}`}>View Details</Link>
+                  </p>
+                </div>
+              </div>
+            ))}
+        </div>
+      </div>
+
       {/* bg-gray-800 mt-40 ml-5 mr-5 p-6 rounded-lg shadow-lg  mx-auto */}
       <div className="bg-gray-800 mt-40 ml-5 mr-5 p-6 rounded-lg shadow-xl mx-auto">
         <h2 className="text-3xl font-bold mb-20 text-yellow-400 text">

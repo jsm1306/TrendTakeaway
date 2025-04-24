@@ -84,3 +84,16 @@ export const updateProduct = async (req, res) => {
     res.status(500).json({ message: err.message, success: false });
   }
 };
+
+export const getTopProductsByCategory = async (req, res) => {
+  try {
+    const { category } = req.params;
+    const products = await Product.find({ category })
+      .sort({ "sentiment.positivePercentage": -1 })
+      .limit(3);
+
+    res.status(200).json(products);
+  } catch (err) {
+    res.status(500).json({ message: err.message, success: false });
+  }
+};

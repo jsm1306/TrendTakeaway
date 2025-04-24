@@ -2,11 +2,19 @@ import React, { useEffect, useState } from "react";
 
 const Compare: React.FC = () => {
   const [compareProducts, setCompareProducts] = useState<any[]>([]);
+  const [categoryMismatch, setCategoryMismatch] = useState(false);
 
   useEffect(() => {
     const storedProducts = localStorage.getItem("compareProducts");
     if (storedProducts) {
-      setCompareProducts(JSON.parse(storedProducts));
+      const products = JSON.parse(storedProducts);
+      setCompareProducts(products);
+
+      const categories = products.map((p: any) => p.category);
+      const allSameCategory = categories.every(
+        (cat: any) => cat === categories[0]
+      );
+      setCategoryMismatch(!allSameCategory);
     }
   }, []);
 
@@ -19,6 +27,10 @@ const Compare: React.FC = () => {
       {compareProducts.length === 0 ? (
         <p className="text-center text-gray-400 text-lg">
           No products selected for comparison.
+        </p>
+      ) : categoryMismatch ? (
+        <p className="text-center text-red-500 text-lg font-semibold">
+          Not comparing same category
         </p>
       ) : (
         <div className="overflow-x-auto rounded-xl border border-gray-700 shadow-inner bg-[#1f1f1f]">
@@ -33,7 +45,6 @@ const Compare: React.FC = () => {
                     <img
                       src={product.image}
                       className="h-36 w-36 object-contain mx-auto rounded-md shadow-lg"
-                      alt={product.name}
                     />
                   </th>
                 ))}
@@ -54,6 +65,10 @@ const Compare: React.FC = () => {
                   suffix: "⭐",
                   style: "text-yellow-400 font-medium",
                 },
+                {
+                  label: "Sentiment",
+                  key: "sentiment",
+                },
               ].map((row) => (
                 <tr
                   key={row.label}
@@ -70,7 +85,9 @@ const Compare: React.FC = () => {
                       }`}
                     >
                       {row.prefix || ""}
-                      {product[row.key]}
+                      {row.key === "sentiment"
+                        ? product.sentiment?.fullText || ""
+                        : product[row.key]}
                       {row.suffix || ""}
                     </td>
                   ))}
