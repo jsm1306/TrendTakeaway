@@ -157,7 +157,7 @@ const Discussion: React.FC<DiscussionProps> = ({
         </button>
         <button
           onClick={() => setShowReplyInput(!showReplyInput)}
-          className="text-sm text-black hover:text-gray-300 transition text-white"
+          className="text-sm text-black hover:text-gray-300 transition"
         >
           💬 Reply
         </button>

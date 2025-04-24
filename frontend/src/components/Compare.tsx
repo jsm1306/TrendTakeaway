@@ -11,90 +11,101 @@ const Compare: React.FC = () => {
   }, []);
 
   return (
-    <div className="mx-auto p-10" style={{ marginLeft: "40px" }}>
-      <h1 className="text-2xl font-bold text-center mb-6">
-        Product Comparison
+    <div className="max-w-7xl mx-auto p-6 text-gray-100">
+      <h1 className="text-3xl font-extrabold text-center mb-10 text-white drop-shadow">
+        🛒 Product Comparison
       </h1>
 
       {compareProducts.length === 0 ? (
-        <p className="text-center text-gray-500">
+        <p className="text-center text-gray-400 text-lg">
           No products selected for comparison.
         </p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse border border-gray-300">
+        <div className="overflow-x-auto rounded-xl border border-gray-700 shadow-inner bg-[#1f1f1f]">
+          <table className="w-full table-fixed border-collapse">
             <thead>
-              <tr className="bg-black-200">
-                <th className="border p-2">Description</th>
+              <tr className="bg-[#2b2b2b] text-gray-200">
+                <th className="border border-gray-700 p-4 text-left text-lg">
+                  Details
+                </th>
                 {compareProducts.map((product) => (
-                  <th key={product._id} className="border p-2">
+                  <th key={product._id} className="border border-gray-700 p-4">
                     <img
                       src={product.image}
-                      className="w-20 h-20 object-cover mx-auto"
+                      className="h-36 w-36 object-contain mx-auto rounded-md shadow-lg"
                       alt={product.name}
                     />
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td className="border p-2 text-center font-bold">Name</td>
-                {compareProducts.map((product) => (
-                  <td key={product._id} className="border p-2 text-center">
-                    {product.name}
+            <tbody className="text-sm">
+              {[
+                { label: "Name", key: "name" },
+                { label: "Price", key: "price", prefix: "₹" },
+                {
+                  label: "Brand",
+                  key: "brand",
+                  style: "text-blue-400 font-medium",
+                },
+                {
+                  label: "Ratings",
+                  key: "ratings",
+                  suffix: "⭐",
+                  style: "text-yellow-400 font-medium",
+                },
+              ].map((row) => (
+                <tr
+                  key={row.label}
+                  className="odd:bg-[#1a1a1a] even:bg-[#242424]"
+                >
+                  <td className="border border-gray-700 p-4 font-semibold text-left text-white">
+                    {row.label}
                   </td>
-                ))}
-              </tr>
-              <tr>
-                <td className="border p-2 text-center font-bold">Price</td>
-                {compareProducts.map((product) => (
-                  <td key={product._id} className="border p-2 text-center">
-                    ₹{product.price}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td className="border p-2 text-center font-bold">Brand</td>
-                {compareProducts.map((product) => (
-                  <td
-                    key={product._id}
-                    className="border p-2 text-center text-yellow-500"
-                  >
-                    {product.brand}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td className="border p-2 text-center font-bold">Ratings</td>
-                {compareProducts.map((product) => (
-                  <td
-                    key={product._id}
-                    className="border p-2 text-center text-yellow-500"
-                  >
-                    {product.ratings}⭐
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td className="border p-2 text-center font-bold">
+                  {compareProducts.map((product) => (
+                    <td
+                      key={product._id}
+                      className={`border border-gray-700 p-4 text-center ${
+                        row.style || "text-gray-200"
+                      }`}
+                    >
+                      {row.prefix || ""}
+                      {product[row.key]}
+                      {row.suffix || ""}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+
+              <tr className="odd:bg-[#1a1a1a] even:bg-[#242424]">
+                <td className="border border-gray-700 p-4 font-semibold text-left text-white">
                   Specifications
                 </td>
                 {compareProducts.map((product) => (
                   <td
                     key={product._id}
-                    className="border p-2 text-center text-yellow-500"
+                    className="border border-gray-700 p-4 text-left text-sm text-gray-300"
                   >
-                    {product.specifications.split(",").map((spec, index) => (
-                      <div key={index}>{spec.trim()}</div>
-                    ))}
+                    {product.specifications
+                      .split(",")
+                      .map((spec: string, index: number) => (
+                        <div key={index} className="mb-1">
+                          • {spec.trim()}
+                        </div>
+                      ))}
                   </td>
                 ))}
               </tr>
-              <tr>
-                <td className="border p-2 text-center font-bold">Actions</td>
+
+              <tr className="odd:bg-[#1a1a1a] even:bg-[#242424]">
+                <td className="border border-gray-700 p-4 font-semibold text-left text-white">
+                  Actions
+                </td>
                 {compareProducts.map((product) => (
-                  <td key={product._id} className="border p-2 text-center">
+                  <td
+                    key={product._id}
+                    className="border border-gray-700 p-4 text-center"
+                  >
                     <button
                       onClick={() => {
                         const updatedProducts = compareProducts.filter(
@@ -106,7 +117,7 @@ const Compare: React.FC = () => {
                           JSON.stringify(updatedProducts)
                         );
                       }}
-                      className="bg-red-500 text-white px-4 py-2 rounded"
+                      className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition duration-200 shadow-md"
                     >
                       Remove
                     </button>
@@ -118,12 +129,12 @@ const Compare: React.FC = () => {
         </div>
       )}
 
-      <div className="text-center mt-4">
+      <div className="text-center mt-10">
         <button
           onClick={() => window.history.back()}
-          className="bg-gray-500 text-white px-4 py-2 rounded"
+          className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg shadow-lg transition"
         >
-          Back
+          ← Back
         </button>
       </div>
     </div>
