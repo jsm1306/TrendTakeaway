@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   BarChart,
   Bar,
@@ -9,10 +9,20 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
+import html2canvas from "html2canvas";
+import {
+  FacebookShareButton,
+  WhatsappShareButton,
+  FacebookIcon,
+  WhatsappIcon,
+} from "react-share";
 
 const Compare: React.FC = () => {
   const [compareProducts, setCompareProducts] = useState<any[]>([]);
   const [categoryMismatch, setCategoryMismatch] = useState(false);
+  const [showShareOptions, setShowShareOptions] = useState(false);
+  const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const compareRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const storedProducts = localStorage.getItem("compareProducts");
@@ -57,8 +67,38 @@ const Compare: React.FC = () => {
     return null;
   };
 
+  const captureComparison = async () => {
+    if (compareRef.current) {
+      const canvas = await html2canvas(compareRef.current, {
+        backgroundColor: null,
+        scale: 2,
+      });
+      const imgData = canvas.toDataURL("image/png");
+      setCapturedImage(imgData);
+      setShowShareOptions(true);
+    }
+  };
+
+  const shareOnTwitter = () => {
+    if (!capturedImage) return;
+    const url = encodeURIComponent(window.location.href);
+    const text = encodeURIComponent("Check out this product comparison!");
+    window.open(
+      `https://twitter.com/intent/tweet?url=${url}&text=${text}`,
+      "_blank"
+    );
+  };
+
+  const downloadImage = () => {
+    if (!capturedImage) return;
+    const link = document.createElement("a");
+    link.href = capturedImage;
+    link.download = "comparison.png";
+    link.click();
+  };
+
   return (
-    <div className="max-w-7xl mx-auto p-6 text-gray-100">
+    <div className="max-w-7xl mx-auto p-6 text-gray-100" ref={compareRef}>
       <h1 className="text-3xl font-extrabold text-center mb-10 text-white drop-shadow">
         🛒 Product Comparison
       </h1>
@@ -223,14 +263,65 @@ const Compare: React.FC = () => {
         </ResponsiveContainer>
       </div>
 
-      <div className="text-center mt-10">
+      <div className="text-center mt-10 space-x-4">
         <button
           onClick={() => window.history.back()}
           className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg shadow-lg transition"
         >
           ← Back
         </button>
+        <button
+          onClick={captureComparison}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-lg transition"
+        >
+          Share
+        </button>
       </div>
+
+      {showShareOptions && capturedImage && (
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex flex-col items-center justify-center z-50 p-4">
+          <h2 className="text-white text-2xl mb-4">Share Comparison</h2>
+          <img
+            src={capturedImage}
+            alt="Comparison"
+            className="max-w-full max-h-96 mb-4 rounded-lg shadow-lg"
+          />
+          <div className="flex justify-center gap-4">
+            <FacebookShareButton
+              url={window.location.href}
+              quote="Check out this comparison!"
+            >
+              <FacebookIcon size={32} round />
+            </FacebookShareButton>
+            <WhatsappShareButton
+              url={window.location.href}
+              title="Check out this comparison!"
+            >
+              <WhatsappIcon size={32} round />
+            </WhatsappShareButton>
+          </div>
+          <div className="space-x-4 mt-4">
+            <button
+              onClick={shareOnTwitter}
+              className="bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded"
+            >
+              Twitter
+            </button>
+            <button
+              onClick={downloadImage}
+              className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded"
+            >
+              Download Image
+            </button>
+            <button
+              onClick={() => setShowShareOptions(false)}
+              className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded ml-4"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
