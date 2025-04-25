@@ -127,7 +127,7 @@ const Compare: React.FC = () => {
                     >
                       <img
                         src={product.image}
-                        className="h-36 w-36 object-contain mx-auto rounded-md shadow-lg"
+                        className="h-50 w-50 object-contain mx-auto rounded-md shadow-lg"
                       />
                     </th>
                   ))}
