@@ -31,11 +31,9 @@ const App: React.FC = () => {
   return (
     <div className="flex h-screen overflow-hidden">
       {" "}
-      {/* ✅ Full height wrapper */}
       <Sidebar>
         <SidebarBody className="h-full">
           {" "}
-          {/* ✅ Ensure SidebarBody fills the height */}
           <div className="flex flex-col gap-4">
             {navLinks.map((link, index) => (
               <SidebarLink
@@ -50,12 +48,10 @@ const App: React.FC = () => {
           </div>
         </SidebarBody>
       </Sidebar>
-      {/* Main Content */}
       <div className="flex-1 flex flex-col h-full overflow-hidden">
         <Header />
         <main className="flex-1 overflow-auto p-4">
           {" "}
-          {/* ✅ Allows scrolling */}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/products" element={<Products />} />

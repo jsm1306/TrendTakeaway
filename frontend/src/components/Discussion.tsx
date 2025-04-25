@@ -8,7 +8,7 @@ import { AiOutlineLike } from "react-icons/ai";
 interface DiscussionProps {
   discussion: {
     _id: string;
-    user: { name: string; sub: string };
+    user: { name: string; sub: string; picture?: string };
     text: string;
     likes: string[];
     replies: DiscussionProps["discussion"][];
@@ -62,7 +62,10 @@ const Discussion: React.FC<DiscussionProps> = ({
     try {
       const response = await axios.post(
         `${baseURL}/discussions/${discussion._id}/reply`,
-        { user: { name: user.name, sub: user.sub }, text: replyText }
+        {
+          user: { name: user.name, sub: user.sub, picture: user.picture },
+          text: replyText,
+        }
       );
 
       setReplies([...replies, response.data]);
@@ -103,10 +106,21 @@ const Discussion: React.FC<DiscussionProps> = ({
   };
 
   return (
-    <div className="w-full border p-4 mb-6 rounded-lg bg-gray-800 text-white shadow-lg pl-5 pr-19">
-      <div className="flex items-center mb-3">
+    <div className="w-full border p-6 mb-6 rounded-lg bg-gray-900 text-white shadow-lg pl-6 pr-20 ">
+      <div className="flex items-center mb-4 space-x-4">
+        {discussion.user.picture ? (
+          <img
+            src={discussion.user.picture}
+            alt={`${discussion.user.name}'s profile`}
+            className="w-12 h-12 rounded-full object-cover"
+          />
+        ) : (
+          <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center text-white font-bold text-xl">
+            {discussion.user.name.charAt(0).toUpperCase()}
+          </div>
+        )}
         <div>
-          <p className="font-semibold">{discussion.user.name}</p>
+          <p className="font-semibold text-lg">{discussion.user.name}</p>
           <p className="text-xs text-gray-400">
             {moment(discussion.createdAt).fromNow()}
           </p>
@@ -118,30 +132,33 @@ const Discussion: React.FC<DiscussionProps> = ({
           <textarea
             value={updatedText}
             onChange={(e) => setUpdatedText(e.target.value)}
-            className="w-full border p-2 rounded bg-gray-900 text-white"
+            className="w-full border p-3 rounded bg-gray-800 text-white resize-none"
+            rows={4}
           />
-          <button
-            onClick={handleEdit}
-            className="bg-green-500 text-white px-3 py-1 mt-2 rounded hover:bg-green-600"
-          >
-            Save
-          </button>
-          <button
-            onClick={() => setIsEditing(false)}
-            className="ml-2 bg-gray-600 text-white px-3 py-1 mt-2 rounded hover:bg-gray-700"
-          >
-            Cancel
-          </button>
+          <div className="mt-3 flex space-x-3">
+            <button
+              onClick={handleEdit}
+              className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+            >
+              Save
+            </button>
+            <button
+              onClick={() => setIsEditing(false)}
+              className="bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800 transition"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       ) : (
-        <p className="text-lg">{discussion.text}</p>
+        <p className="text-lg whitespace-pre-wrap">{discussion.text}</p>
       )}
 
-      <div className="flex items-center mt-3 space-x-6">
+      <div className="flex items-center mt-5 space-x-6">
         <button
           onClick={handleLike}
-          className={`px-4 py-2 rounded text-sm flex items-center space-x-2 transition ${
-            hasLiked ? "bg-blue-500 text-white" : "bg-gray-600 text-gray-300"
+          className={`px-5 py-2 rounded text-sm flex items-center space-x-2 transition ${
+            hasLiked ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-400"
           }`}
         >
           <AiOutlineLike />
@@ -149,7 +166,7 @@ const Discussion: React.FC<DiscussionProps> = ({
         </button>
         <button
           onClick={() => setShowReplyInput(!showReplyInput)}
-          className="text-sm text-black hover:text-gray-300 transition"
+          className="text-sm text-gray-900 hover:text-gray-600 transition"
         >
           💬 Reply
         </button>
@@ -158,7 +175,7 @@ const Discussion: React.FC<DiscussionProps> = ({
           <>
             <button
               onClick={() => setIsEditing(true)}
-              className="text-yellow-500 hover:text-yellow-600 flex items-center space-x-1 cursor-pointer"
+              className="text-yellow-400 hover:text-yellow-500 flex items-center space-x-1 cursor-pointer"
             >
               <MdModeEditOutline />
               <span>Edit</span>
@@ -175,16 +192,17 @@ const Discussion: React.FC<DiscussionProps> = ({
       </div>
 
       {showReplyInput && (
-        <div className="mt-3">
+        <div className="mt-4">
           <textarea
             value={replyText}
             onChange={(e) => setReplyText(e.target.value)}
-            className="w-full border p-3 rounded bg-gray-900 text-white"
+            className="w-full border p-3 rounded bg-gray-800 text-white resize-none"
             placeholder="Write a reply..."
+            rows={3}
           />
           <button
             onClick={handleReply}
-            className="bg-blue-600 text-white px-4 py-2 mt-2 rounded hover:bg-blue-700"
+            className="bg-blue-600 text-black px-5 py-2 mt-3 rounded hover:bg-blue-700 transition"
           >
             Reply
           </button>
@@ -192,14 +210,15 @@ const Discussion: React.FC<DiscussionProps> = ({
       )}
 
       {replies && replies.length > 0 && (
-        <div className="mt-4 border-l-4 border-gray-600 pl-4">
+        <div className="mt-6 pl-6 border-blue-500 relative">
           {replies.map((reply, index) =>
             reply && reply.user ? (
-              <Discussion
+              <div
                 key={reply._id || index}
-                discussion={reply}
-                onDelete={onDelete}
-              />
+                className="relative pl-6 before:absolute before:left-0 before:top-0 before:bottom-0 before:w-0.5 before:bg-blue-500"
+              >
+                <Discussion discussion={reply} onDelete={onDelete} />
+              </div>
             ) : null
           )}
         </div>

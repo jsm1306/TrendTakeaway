@@ -23,7 +23,9 @@ function ProductDetails() {
     fetch(`${baseUrl}/products/${id}`)
       .then((response) => response.json())
       .then((data) => setProduct(data))
-      .catch((error) => console.error("Error fetching product:", error));
+      .catch((error: any) =>
+        console.error("Error fetching product:", error as any)
+      );
   }, [id]);
 
   useEffect(() => {
@@ -39,7 +41,7 @@ function ProductDetails() {
           setRecommendations([]);
           console.error("Recommendations data is not an array:", response.data);
         }
-      } catch (error) {
+      } catch (error: any) {
         if (error.response) {
           console.error("Error fetching recommendations:", error.response.data);
         } else {
@@ -63,7 +65,7 @@ function ProductDetails() {
 
   const radarData = [
     { metric: "Price", value: normalizedPrice },
-    { metric: "Ratings", value: product.ratings / 5 }, // assuming max rating 5
+    { metric: "Ratings", value: product.ratings / 5 },
     {
       metric: "Sentiment Positive %",
       value: (product.sentiment?.positivePercentage || 0) / 100,
@@ -122,7 +124,6 @@ function ProductDetails() {
         </div>
       </div>
 
-      {/* Radar Chart Section */}
       <div className="bg-gray-800 mt-20 ml-5 mr-5 p-6 rounded-lg shadow-xl mx-auto max-w-md">
         <h2 className="text-white text-2xl font-bold mb-8 text-center">
           Product Multi-Metric Comparison
@@ -184,7 +185,6 @@ function ProductDetails() {
         </div>
       </div>
 
-      {/* Sentiment Analysis Section */}
       <div className="bg-gray-800 mt-40 ml-5 mr-5 p-6 rounded-lg shadow-xl mx-auto">
         <h2 className="text-3xl font-bold mb-20 text-yellow-400 text">
           Sentiment Analysis

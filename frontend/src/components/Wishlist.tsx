@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
-
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 const Wishlist = () => {
   const { user, isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [wishlist, setWishlist] = useState<any[]>([]);
@@ -12,20 +12,14 @@ const Wishlist = () => {
 
       try {
         const token = await getAccessTokenSilently();
-        const res = await axios.get(
-          `http://localhost:5000/api/users/${user.sub}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const res = await axios.get(`${baseUrl}/users/${user.sub}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         const fetchedAuth0Id = res.data.data?.auth0Id || res.data.data?.user_id;
         if (fetchedAuth0Id) setAuth0Id(fetchedAuth0Id);
       } catch (err) {
-        console.error(
-          "Error fetching userId:",
-          err.response?.data || err.message
-        );
+        console.error("Error fetching userId:");
       }
     };
     fetchUserId();
@@ -35,18 +29,14 @@ const Wishlist = () => {
     if (!auth0Id) return;
     try {
       const token = await getAccessTokenSilently();
-      const res = await axios.get(
-        `http://localhost:5000/api/wishlist/user/${auth0Id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await axios.get(`${baseUrl}/wishlist/user/${auth0Id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const wishlistItems = res.data.data?.products || [];
       setWishlist(wishlistItems);
       localStorage.setItem("wishlist", JSON.stringify(wishlistItems));
     } catch (err) {
-      console.error(
-        "Error fetching wishlist:",
-        err.response?.data || err.message
-      );
+      console.error("Error fetching wishlist:");
     }
   }, [auth0Id, getAccessTokenSilently]);
   useEffect(() => {
@@ -56,16 +46,12 @@ const Wishlist = () => {
   const removeFromWishlist = async (id: string) => {
     try {
       const token = await getAccessTokenSilently();
-      await axios.delete(
-        `http://localhost:5000/api/wishlist/${auth0Id}/${id}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.delete(`${baseUrl}/wishlist/${auth0Id}/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setWishlist((prev) => prev.filter((item) => item._id !== id));
     } catch (error) {
-      console.error(
-        "Error removing wishlist item:",
-        error.response?.data || error.message
-      );
+      console.error("Error removing wishlist item:");
     }
   };
 

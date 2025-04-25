@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
-import { Badge } from "./ui/badge";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
@@ -99,7 +98,7 @@ const Products: React.FC = () => {
     if (isAuthenticated) fetchWishlist();
   }, [isAuthenticated, user?.sub, getAccessTokenSilently]);
 
-  const toggleWishlist = async (productId) => {
+  const toggleWishlist = async (productId: any) => {
     if (!user?.sub) {
       alert("Please log in to add items to the wishlist.");
       return;
@@ -185,7 +184,7 @@ const Products: React.FC = () => {
             <CommandList>
               <CommandEmpty>No {label} found.</CommandEmpty>
               <CommandGroup>
-                {options.map((option) => (
+                {options.map((option: any) => (
                   <CommandItem
                     key={option}
                     value={option}
@@ -259,7 +258,7 @@ const Products: React.FC = () => {
           label="Ratings"
           options={["0", "1", "2", "3", "4", "5"]}
           value={String(rating)}
-          setValue={(val) => setRating(val === rating ? "" : val)}
+          setValue={(val: any) => setRating(val === rating ? "" : val)}
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pr-5 pl-5">

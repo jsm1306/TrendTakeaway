@@ -6,7 +6,6 @@ import { Timeline } from "./ui/timeline";
 import { useState, useEffect } from "react";
 import { Carousel, Card } from "./ui/apple-cards-carousel";
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
-import { Boxes } from "./ui/background-boxes";
 
 const Home = () => {
   const words = [

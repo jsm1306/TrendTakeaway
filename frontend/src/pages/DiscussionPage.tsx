@@ -3,6 +3,8 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 import Discussion from "../components/Discussion";
 
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
+
 interface DiscussionType {
   _id: string;
   user: { name: string; sub: string };
@@ -18,14 +20,12 @@ const DiscussionPage: React.FC = () => {
   const { user, isAuthenticated } = useAuth0();
 
   useEffect(() => {
-    if (isAuthenticated) {
-      fetchDiscussions();
-    }
+    if (isAuthenticated) fetchDiscussions();
   }, [isAuthenticated]);
 
   const fetchDiscussions = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/api/discussions");
+      const { data } = await axios.get(`${baseUrl}/discussions`);
       setDiscussions(data);
     } catch (error) {
       console.error("Error fetching discussions:", error);
@@ -33,22 +33,17 @@ const DiscussionPage: React.FC = () => {
   };
 
   const handleCreateDiscussion = async () => {
-    if (!newDiscussion.trim()) return;
-    if (!isAuthenticated || !user)
-      return console.error("User not authenticated");
+    if (!newDiscussion.trim() || !user || !isAuthenticated) return;
 
     try {
-      const { data } = await axios.post(
-        "http://localhost:5000/api/discussions",
-        {
-          user: { name: user.name, sub: user.sub },
-          text: newDiscussion,
-        }
-      );
+      await axios.post(`${baseUrl}/discussions`, {
+        user: { name: user.name, sub: user.sub },
+        text: newDiscussion,
+      });
 
-      setNewDiscussion(""); // Clear input
-      fetchDiscussions(); // Refetch updated discussions
-    } catch (error) {
+      setNewDiscussion("");
+      fetchDiscussions();
+    } catch (error: any) {
       console.error(
         "Error creating discussion:",
         error.response?.data || error
@@ -57,8 +52,12 @@ const DiscussionPage: React.FC = () => {
   };
 
   const handleDeleteDiscussion = (id: string) => {
+    setDiscussions((prev) => prev.filter((d) => d._id !== id));
+  };
+
+  const handleEditDiscussion = (id: string, newText: string) => {
     setDiscussions((prev) =>
-      prev.filter((discussion) => discussion._id !== id)
+      prev.map((d) => (d._id === id ? { ...d, text: newText } : d))
     );
   };
 
@@ -69,41 +68,34 @@ const DiscussionPage: React.FC = () => {
       </div>
     );
   }
-  const handleEditDiscussion = (id: string, newText: string) => {
-    setDiscussions((prev) =>
-      prev.map((discussion) =>
-        discussion._id === id ? { ...discussion, text: newText } : discussion
-      )
-    );
-  };
+
   return (
-    <div className="p-6 max-w-2xl mx-auto mt-4 ml-14">
-      <h1 className="text-2xl font-bold mt-4 ml-6">Discussions</h1>
-      <div className="mb-4">
+    <div className="max-w-6xl mx-auto mt-4 ml-4">
+      <h1 className="text-2xl font-bold mb-14">Discussions</h1>
+
+      <div className="mb-8">
         <textarea
           value={newDiscussion}
           onChange={(e) => setNewDiscussion(e.target.value)}
           placeholder="Start a discussion..."
-          className="w-full border rounded p-2 text-black"
+          className="w-full border rounded p-3 text-black"
         />
         <button
           onClick={handleCreateDiscussion}
-          className="bg-blue-500 text-white px-4 py-2 mt-2 rounded"
+          className="bg-blue-500 text-white px-4 py-2 mt-2 mb-12 rounded hover:bg-blue-600"
         >
           Post
         </button>
       </div>
-      {discussions.map(
-        (discussion, index) =>
-          !discussion.parentId && (
-            <Discussion
-              key={discussion._id || index}
-              discussion={discussion}
-              onDelete={handleDeleteDiscussion}
-              onEdit={handleEditDiscussion}
-            />
-          )
-      )}
+
+      {discussions.map((discussion) => (
+        <Discussion
+          key={discussion._id}
+          discussion={discussion}
+          onDelete={handleDeleteDiscussion}
+          onEdit={handleEditDiscussion}
+        />
+      ))}
     </div>
   );
 };
