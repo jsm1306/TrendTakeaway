@@ -3,6 +3,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
+import {
+  Radar,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  ResponsiveContainer,
+} from "recharts";
+
 const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 function ProductDetails() {
@@ -16,6 +25,7 @@ function ProductDetails() {
       .then((data) => setProduct(data))
       .catch((error) => console.error("Error fetching product:", error));
   }, [id]);
+
   useEffect(() => {
     const fetchRecommendations = async () => {
       if (!product) return;
@@ -41,7 +51,28 @@ function ProductDetails() {
 
     fetchRecommendations();
   }, [product]);
+
   if (!product) return <div className="text-white p-10">Loading...</div>;
+
+  // Normalize price for radar chart (example: divide by max price among recommendations or fixed max)
+  const maxPrice = Math.max(
+    product.price,
+    ...recommendations.map((p) => p.price)
+  );
+  const normalizedPrice = product.price / maxPrice;
+
+  const radarData = [
+    { metric: "Price", value: normalizedPrice },
+    { metric: "Ratings", value: product.ratings / 5 }, // assuming max rating 5
+    {
+      metric: "Sentiment Positive %",
+      value: (product.sentiment?.positivePercentage || 0) / 100,
+    },
+    {
+      metric: "Sentiment Confidence %",
+      value: (product.sentiment?.confidencePercentage || 0) / 100,
+    },
+  ];
 
   return (
     <div className="text-white">
@@ -53,6 +84,7 @@ function ProductDetails() {
           />
         </div>
 
+        {/* Right Section – Details */}
         <div className="flex-1 space-y-4 pl-14">
           <h1 className="text-3xl font-bold">{product.name}</h1>
           <p className="text-yellow-400 text-2xl font-semibold">
@@ -89,6 +121,28 @@ function ProductDetails() {
           </div>
         </div>
       </div>
+
+      {/* Radar Chart Section */}
+      <div className="bg-gray-800 mt-20 ml-5 mr-5 p-6 rounded-lg shadow-xl mx-auto max-w-md">
+        <h2 className="text-white text-2xl font-bold mb-8 text-center">
+          Product Multi-Metric Comparison
+        </h2>
+        <ResponsiveContainer width="100%" height={300}>
+          <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
+            <PolarGrid />
+            <PolarAngleAxis dataKey="metric" />
+            <PolarRadiusAxis angle={30} domain={[0, 1]} />
+            <Radar
+              name={product.name}
+              dataKey="value"
+              stroke="#FBBF24"
+              fill="#FBBF24"
+              fillOpacity={0.6}
+            />
+          </RadarChart>
+        </ResponsiveContainer>
+      </div>
+
       <div className="bg-gray-800 mt-40 ml-5 mr-5 p-6 rounded-lg shadow-xl mx-auto">
         <h2 className="text-white text-2xl font-bold mb-8 text-center">
           Recommended Products
@@ -130,7 +184,7 @@ function ProductDetails() {
         </div>
       </div>
 
-      {/* bg-gray-800 mt-40 ml-5 mr-5 p-6 rounded-lg shadow-lg  mx-auto */}
+      {/* Sentiment Analysis Section */}
       <div className="bg-gray-800 mt-40 ml-5 mr-5 p-6 rounded-lg shadow-xl mx-auto">
         <h2 className="text-3xl font-bold mb-20 text-yellow-400 text">
           Sentiment Analysis

@@ -27,6 +27,7 @@ const Products: React.FC = () => {
   const [category, setCategory] = useState<string>("");
   const [brand, setBrand] = useState<string>("");
   const [company, setCompany] = useState<string>("");
+  const [rating, setRating] = useState<string>("");
 
   const categories = [
     "TV",
@@ -40,7 +41,16 @@ const Products: React.FC = () => {
     "HairDryers",
     "Cooler",
   ];
-  const brands = ["LG", "boat", "Asus", "HP", "Zebronics", "Panasonic"];
+  const [brands, setBrands] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (products.length > 0) {
+      const uniqueBrands = Array.from(
+        new Set(products.map((p) => p.brand))
+      ).filter(Boolean);
+      setBrands(uniqueBrands);
+    }
+  }, [products]);
   const companies = ["Amazon", "Flipkart"];
 
   useEffect(() => {
@@ -146,8 +156,12 @@ const Products: React.FC = () => {
     if (category) filtered = filtered.filter((p) => p.category === category);
     if (brand) filtered = filtered.filter((p) => p.brand === brand);
     if (company) filtered = filtered.filter((p) => p.company === company);
+    if (rating)
+      filtered = filtered.filter(
+        (p) => Math.floor(p.ratings) === Number(rating)
+      );
     setFilteredProducts(filtered);
-  }, [category, brand, company, products]);
+  }, [category, brand, company, rating, products]);
 
   const FilterCombobox = ({ label, options, value, setValue }) => {
     const [open, setOpen] = useState(false);
@@ -240,6 +254,12 @@ const Products: React.FC = () => {
           options={companies}
           value={company}
           setValue={setCompany}
+        />
+        <FilterCombobox
+          label="Ratings"
+          options={["0", "1", "2", "3", "4", "5"]}
+          value={String(rating)}
+          setValue={(val) => setRating(val === rating ? "" : val)}
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pr-5 pl-5">
