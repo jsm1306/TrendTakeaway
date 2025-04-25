@@ -5,7 +5,7 @@ import {
   getProducts,
   updateProduct,
   getProductById,
-  getTopProductsByCategory,
+  getRecommendedProductsByProductId,
 } from "../controllers/product.controller.js";
 import checkJwt from "../utils/authMiddleware.js";
 
@@ -16,6 +16,9 @@ router.post("/", checkJwt, createProduct);
 router.delete("/:id", checkJwt, deleteProduct);
 router.put("/:id", checkJwt, updateProduct);
 router.get("/:id", getProductById);
-router.get("/recommendations/:category", getTopProductsByCategory);
+router.get(
+  "/recommendations/product/:productId",
+  getRecommendedProductsByProductId
+);
 
 export default router;

@@ -21,9 +21,8 @@ function ProductDetails() {
       if (!product) return;
       try {
         const response = await axios.get(
-          `${baseUrl}/products/recommendations/${product.category}`
+          `${baseUrl}/products/recommendations/product/${product._id}`
         );
-        // Ensure response.data is an array before setting state
         if (Array.isArray(response.data)) {
           setRecommendations(response.data);
         } else {
@@ -54,7 +53,6 @@ function ProductDetails() {
           />
         </div>
 
-        {/* Right Section – Details */}
         <div className="flex-1 space-y-4 pl-14">
           <h1 className="text-3xl font-bold">{product.name}</h1>
           <p className="text-yellow-400 text-2xl font-semibold">
